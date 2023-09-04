@@ -3,16 +3,29 @@ body, html {
     font-family: 'Arial', sans-serif;
 }
 
+.icon-banner {
+    max-width: 1100px;
+    margin: auto; /* This centers the banner horizontally */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.icon-banner img {
+    width: 50px;
+    height: 50px;
+}
+
 .container {
     display: flex;
     justify-content: center;
     align-items: top;
-    /*height: 100%; */
 }
 
 #content {
     padding: 30px;
-    max-width:1100px;
+    max-width: 1100px;
     margin: auto;
 }
 
