@@ -38,3 +38,22 @@ footer {
     width: 100%;
     bottom: 0;
 }
+
+@keyframes jitter {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(1px, 1px); }
+    50% { transform: translate(0, 1px); }
+    75% { transform: translate(1px, 0); }
+    100% { transform: translate(0, 0); }
+}
+
+.jitter-text::after {
+    content: attr(data-text);
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    animation: jitter 0.1s infinite;
+}
+
