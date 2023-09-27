@@ -9,175 +9,189 @@
 </head>
 
 <body>
+    <div class="main-flex-container">
+        <nav id="sticky-nav">
+            <div class="nav-content">
+                <a href="#about-me">About Me</a>
+                <a href="#professional-skills">Professional Skills</a>
+                <a href="#academic-experience">Academic Experience and Projects</a>
+                <a href="#professional-experience">Professional Experience and Projects</a>
+                <a href="#leadership-skills">Leadership Skills</a> <a href="#teamwork-skills">Teamwork Skills</a>
+                <a href="#site-details">Site Details</a>
+            </div>
+        </nav>
 
-    <div class="container">
-        <h1>Robert Thompson's Electronic Portfolio</h1>
-    </div>
+        <div>
+            <div class="container">
+                <h1>Robert Thompson's Electronic Portfolio</h1>
+            </div>
 
-    <div class="icon-banner">
-        <img src="andg.png" alt="Android Logo">
-        <img src="C_Logo.png" alt="C Logo">
-        <img src="Clojure_logo.svg.png" alt="Clojure Logo">
-        <img src="embedded.png" alt="Embedded Logo">
-        <img src="Git-Icon-1788C.png" alt="Git Icon">
-        <img src="Java-Emblem.jpg" alt="Java Emblem">
-        <img src="Maven Image.png" alt="Maven Logo">
-        <img src="Postgresql_elephant.svg" alt="Postgresql Elephant Logo">
-        <img src="Python-logo-notext.svg.png" alt="Python Logo">
-        <img src="linux.png" alt="Linux Logo">
-        <img src="windows.png" alt="Windows Logo">
-    </div>
+            <div class="icon-banner"> <img src="andg.png" alt="Android Logo">
+                <img src="C_Logo.png" alt="C Logo">
+                <img src="Clojure_logo.svg.png" alt="Clojure Logo">
+                <img src="embedded.png" alt="Embedded Logo">
+                <img src="Git-Icon-1788C.png" alt="Git Icon">
+                <img src="Java-Emblem.jpg" alt="Java Emblem">
+                <img src="Maven Image.png" alt="Maven Logo">
+                <img src="Postgresql_elephant.svg" alt="Postgresql Elephant Logo">
+                <img src="Python-logo-notext.svg.png" alt="Python Logo">
+                <img src="linux.png" alt="Linux Logo">
+                <img src="windows.png" alt="Windows Logo">
+            </div>
 
-    <div class="container">
-        <section id="content">
-            <a href="resume.docx" download>download resume</a>
-            <h2>About Me</h2>
+            <div class="container">
+                <section id="content"> <a href="resume.docx" download>download resume</a>
+                    <div class="section" id="about-me">
+                        <h2>About Me</h2>
+                        <p>Hello! My name is Robert Thompson. I created this site as an easy way to share a bit about
+                            myself. </p>
+                        <p>I studied Electrical Engineering at UTS because of my interest in building things,
+                            optimizing, and its general versatility as a degree. Throughout my time at UTS, I not only
+                            acquired technical skills but also gained insight into what motivates me and where I'd like
+                            to take my career.</p>
+                        <p>Throughout my career, I hope to provide expertise in software development, IT/OT, electrical
+                            engineering and electronics design to help and contribute to teams and projects I find
+                            enthralling. I aim to contribute my little part to the wild world of modern technology and
+                            have fun along the way. </p>
+                        <p>My strengths lie in big-picture thinking and idea generation. I relish devising creative
+                            solutions and thinking outside the box. I am able to quickly generate new approaches and
+                            ideas without becoming too attached and heading in the wrong direction. I often find myself
+                            more on the practical side than the theoretical.</p>
+                        <p>Outside of university and work, I'm passionate about sports! A loose list, from my most to
+                            least interested (currently), would be: rock climbing, futsal, skiing/snowboarding (time and
+                            money permitting, haha), Brazilian jiu-jitsu, downhill skateboarding, hiking, cycling,
+                            surfing, and more recently; kayaking and sailing! While I no doubt enjoy solving complex
+                            technical problems, I also enjoy spending time reflecting and relaxing in nature.</p>
+                    </div>
+                    <br />
+                    <div class="section" id="professional-skills">
+                        <h3>Professional Skills</h3>
+                        <p>I have experience and skills in very high-level programming (clojure/clojurescript
+                            repl-driven development) and lower-level programming (assembly and C at university), with a
+                            lot in between (Python scripting, Java/Maven development).</p>
+                        <p>I'm adept at working with Windows and Linux (including CLI) machines remotely, understanding
+                            the complications that arise. I possess solid skills in SQL and databases, Nagios and other
+                            health and monitoring platforms, networking, and hypervisors. I'm also proficient with
+                            Excel, the Microsoft suite of products, and their Google counterparts. I know when to 3-bet
+                            from the big blind when facing an open from the high-jack.</p>
+                        <p>I know git.</p>
+                        <p>I consider myself an expert user of generative AI, especially GPT-4 and Phind. I've been
+                            ahead of the curve with many of these technologies, handling them with finesse and
+                            understanding to produce high-quality work swiftly without compromising company IP.</p>
+                        <p>I have experience with and enjoy working in teams, whether it be remote or in-office. I know
+                            how to communicate professionally in a no-nonsense and concise manner without being overly
+                            blunt. I understand how to talk shop but also create meaningful and enjoyable friendships
+                            with people from all walks of life.</p>
+                        <p>I enjoy learning new technologies. I am curious to learn their pros, cons, quirks, and design
+                            principles. While I enjoy moving and learning fast I can also slow down and be details
+                            oriented when necessary. </p>
+                        <p>Excellent skills and experience in working with clients to refine project specifications to
+                            an agreeable and achievable timeline. E.g. explaining the limitations on the flexibility of
+                            JSON parsing to non technical stakeholders.</p>
+                    </div>
+                    <br />
+                    <div class="section" id="academic-experience">
+                        <h3>Academic Experience and Projects</h3>
+                        <p>Collaborated in a team to model and write three types of controllers to successfully balance
+                            a Rotary Inverted Pendulum. I was responsible chiefly for the modelling of the system and
+                            the design of the discrete time controller, which performed excellently. I learned a lot
+                            about control theory and Matlab. (Maths, MatLab, Control Theory, Arduino C).</p>
+                        <p>Lead a team project to plan and write software for various tasks related to navigating a
+                            small robot in a maze. Using the Robot Operating System to handle detecting certain shapes
+                            and colours, simultaneous localisation and planning (SLAM), and path planning. We achieved a
+                            28.5/30 in which we dropped a few points due to writing some slightly hacky and domain
+                            specific code (which was considerably more efficient). (ROS, Python, computer vision,
+                            pathfinding, and planning algorithms).</p>
+                        <p>Successfully designed multiple digital and embedded systems; designing fully featured digital
+                            alarm clocks from the ground up (from gates) and protocol compliant embedded systems on bare
+                            bones microcontrollers (digital logic, Embedded C, various communication protocols, Quartus
+                            Prime, Verilog/VHDL).</p>
+                        <p>Worked in a group to successfully research, plan and design (not implement) a sustainable
+                            microgrid for a rural town within Australia. Researching various energy generation and
+                            storage solutions and modelling with MATLAB and Simulink. I was responsible for writing the
+                            simulations which determined the size and specifications of the distributed energy resouces
+                            required in the town. We achieved a high distinction for our work.</p>
+                        <p>Researched and designed machine learning models to classify rock climbing route difficulties
+                            for my capstone research project. Using python based libraries pytorch, opencv and scikit
+                            learn I created and compared various machine learning classification models for the task of
+                            grading the difficulty of MoonBoard climbs, more information here. (image processing,
+                            machine learning, python, research, and report writing).</p>
+                    </div>
+                    <br />
+                    <div class="section" id="professional-experience">
+                        <h3>Professional Experience and Projects</h3>
+                        <p>At Langdale Consultants, a small bespoke engineering consultancy;</p>
+                        <p>I authored, tested,
+                            deployed, and monitored various pieces of software designed to gather and
+                            manage data from multiple pieces of infrastructure within the expanding smart electricity
+                            grid. I achieved and received commendations from co-workers and clients alike (Java, Maven,
+                            Git, Jenkins, Artifactory, Karaf, ActiveMQ, Linux, communication with clients, communication
+                            with external API providers).</p>
+                        <p>Set up comprehensive infrastructure monitoring platforms to ensure the stability of our
+                            production environment, achieved a considerable improvement in the visibility of our stack.
+                            Usage of Python scripts written alongside various other technologies like JMX to achieve
+                            visibility at the granular application level.
+                            (NCPA, NagiosXI, Python).</p>
+                        <p>Responsible for representing our team at various technical meetings with our clients, e.g.
+                            advising on networking changes that might affect our systems. (MS teams calls, email
+                            communication).</p>
+                        <p>Refactored and improved various parts of our production code and improved the CI/CD stack.
+                        </p>
 
-            <p>Hello! My name is Robert Thompson. I created this site as a more casual way to share a bit about myself.
-            </p>
+                        <p>At Day8 Technology, junior software developer internship;</p>
+                        <p>Successfully developed and documented various high-level front-end web UI components in
+                            clojurescript for our public component library, e.g.
+                            datepicker (yes, another datepicker, haha).</p>
 
-            <p>Outside of university and work, I'm passionate about sports! A loose list, from my most to least
-                interested (currently), would be: rock climbing, futsal, skiing/snowboarding (time and money permitting,
-                haha), Brazilian jiu-jitsu, downhill skateboarding, hiking, cycling, surfing, and more recently;
-                kayaking and sailing! While I no doubt enjoy solving complex technical problems, I also enjoy spending
-                time reflecting and relaxing in nature.</p>
-
-            <p>My strengths lie in big-picture thinking and idea generation. I relish devising creative solutions and
-                thinking outside the box. I am able to quickly generate new approaches and ideas without becoming too
-                attached and heading in the wrong direction. I often find myself more on the practical side than
-                the theoretical.</p>
-
-            <p>Throughout my career, I hope to provide expertise in software development, IT/OT, electrical engineering
-                and electronics design to help and contribute to teams and projects I find enthralling. I aim to
-                contribute my little part to the wild world of modern technology and have fun along the way.</p>
-
-            <p>I studied Electrical Engineering at UTS because of my interest in building things, optimizing, and its
-                general versatility as a degree. Throughout my time at UTS, I not only acquired technical skills but
-                also gained insight into what motivates me and where I'd like to take my career.</p>
-            <br />
-
-            <h3>Professional Skills</h3>
-            <p>I have experience and skills in very high-level programming (clojure/clojurescript repl-driven
-                development) and lower-level programming (assembly and C at university), with a lot in between (Python
-                scripting, Java/Maven development).</p>
-
-            <p>I'm adept at working with Windows and Linux (including CLI) machines remotely, understanding the
-                complications that arise. I possess solid skills in SQL and databases, Nagios and other health and
-                monitoring platforms, networking, and hypervisors. I'm also proficient with Excel, the Microsoft suite
-                of products, and their Google counterparts. I know when to 3-bet from the big blind when facing an open
-                from the high-jack.</p>
-
-            <p>I know git.</p>
-
-            <p>I consider myself an expert user of generative AI, especially GPT-4 and Phind. I've been ahead of the
-                curve with many of these technologies, handling them with finesse and understanding to produce
-                high-quality work swiftly without compromising company IP.</p>
-
-            <p>I have experience with and enjoy working in teams, whether it be remote or in-office. I know how to
-                communicate professionally in a no-nonsense and concise manner without being overly blunt. I understand
-                how to talk shop but also create meaningful and enjoyable friendships with people from all walks of
-                life.</p>
-
-            <p>I enjoy learning new technologies. I am curious to learn their pros, cons, quirks, and design principles.
-                While I enjoy moving and learning fast I can also slow down and be details oriented when necessary.
-            </p>
-
-            <br />
-
-            <h3>Academic Experience and Projects</h3>
-            <p>Collaborated in a team to model and write three types of controllers to successfully balance a Rotary
-                Inverted Pendulum (Maths, MatLab, Control Theory, Arduino C).</p>
-            <p>Lead a team project to plan and write software for various tasks related to navigating a small
-                robot in a maze. Using the Robot Operating System to handle detecting certain shapes and colours,
-                simultaneous localisation and planning (SLAM), and path planning. (ROS, Python, computer vision,
-                pathfinding, and planning algorithms).</p>
-            <p>Successfully designed multiple digital and embedded systems; designing fully featured digital alarm
-                clocks from the ground up (and gates) and protocol compliant embedded systems on bare bones
-                microcontrollers (digital logic, Embedded C, various communication
-                protocols, Quartus Prime, Verilog/VHDL).</p>
-            <p>Worked in a group to successfully research, plan and design (not implement) a sustainable microgrid for a
-                rural town within Australia. Researching various energy generation and storage solutions and modelling
-                with MATLAB and Simulink.</p>
-            <p>Researched and designed machine learning models to classify rock climbing route difficulties (image
-                processing, machine learning, python, research, and report writing).</p>
-
-            <br />
-
-            <h3>Professional Experience and Projects</h3>
-            <p>Authored, tested, deployed, and monitored various pieces of software designed to gather and manage data
-                from multiple pieces of infrastructure within the expanding smart electricity grid. Achieved and
-                received commendations from co-workers and clients alike (Java, Maven, Git,
-                Jenkins, Artifactory, Karaf, ActiveMQ, Linux, communication with clients, communication with external API
-                providers).</p>
-            <p>Set up comprehensive infrastructure monitoring platforms to ensure the stability of our production
-                environment, achieved a considerable improvement in the visibility of our stack (NCPA, NagiosXI,
-                Python).</p>
-            <p>Refactored and improved various parts of our production code and improved our CI/CD stack.</p>
-            <p>Successfully developed various high-level front-end web UI components in clojurescript, e.g. datepicker
-                (yes,
-                another datepicker, haha).</p>
-            <p>Excellent skills and experience in working with clients to refine project specifications to an agreeable
-                and achievable timeline.
-            </p>
-            <br />
-
-            <h3>Leadership Skills</h3>
-            <p>I consider myself about 80% up the leadership scale (my own theory). Given the average person sits at 50%
-                on this scale, it means that in a group of equally experienced peers, if I have the highest "leadership
-                score", I'm likely to assume a leadership role. However, in a group of 8, someone else might score
-                higher, in which
-                case I'm more than happy to let them lead.</p>
-            <p>In my opinion, leadership should be viewed as a burden of service more than a position of elevated
-                status.
-                When I am in leadership positions, I feel responsible for the performance of the group as a whole and
-                aim
-                to allow every group member to contribute to their best ability. This means creating an environment
-                where people do not feel left out or left behind and feel as though their opinions are truly heard.</p>
-            <p>Due to this understanding that I have of leadership, it also means I am an excellent team member and
-                contributor even when not in a leadership position. I understand the difficulties and responsibilities 
-                and aim to provide succinct and meaningful information to my leader without overwhelming them with the
-                details.</p>
-
-            <br />
-
-            <h3>Teamwork Skills</h3>
-            <p>I thrive in team settings. The opportunity to bounce ideas and energy off others is not only essential
-                for producing remarkable results but also makes the journey enjoyable. "If you want to go fast, go
-                alone;
-                if you want to go far, go together."</p>
-
-            <p>I am a fair team member, understanding and never falling into any of the classic spiteful traps that
-                can arise from communication breakdowns. I believe the first step to being a fair team member
-                is being fair with oneself. I understand that some people are stronger in areas other than
-                communication and teamwork (often highly technical individuals), and I aim to make their teamwork
-                experience as easy
-                and enjoyable as possible.</p>
-
-            <p>By no means am I a smooth-talking CEO character, but I believe that I possess a valuable combination of
-                technical and interpersonal skills that make me a valuable and enjoyable team member to work with.</p>
-
-            <br>
-
-            <h3>Site Details</h3>
-            <p>I created this site with plain css and html as a somewhat return to simplicity. Web1 style sites are a
-                dying but elegant breed (yes, I like lisp
-                languages, how could you tell... or maybe I have just spent too much time on hacker news). The site is
-                hosted for free by <a href="https://pages.github.com/">github pages</a>.
-            </p>
-
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-
-        </section>
-    </div>
-
-    <footer>
-        <p>0498044191 - robbie.thompsonator@gmail.com</p>
-    </footer>
-
+                    </div>
+                    <br />
+                    <div class="section" id="leadership-skills">
+                        <h3>Leadership Skills</h3>
+                        <p>When I am in leadership positions, I feel responsible for the performance
+                            of the group as a whole and aim to allow every group member to contribute to their best
+                            ability. This means creating an environment where people do not feel left out or left behind
+                            and feel as though their opinions are truly heard. </p>
+                        <p>In many University group assignments I
+                            have assumed the role of ad-hoc leader, such as the previously discussed robotics group. I
+                            fairly distributed work based on skills and encouraged others with assistance and by putting
+                            good work forward myself. I kept communication channels open and active as is necessary in
+                            any successful group project.</p>
+                        <p>I am also an excellent team
+                            member and contributor even when not in a leadership position. I understand the difficulties
+                            and responsibilities and aim to provide succinct and meaningful information to my leader
+                            without overwhelming them with the details.</p>
+                    </div>
+                    <br />
+                    <div class="section" id="teamwork-skills">
+                        <h3>Teamwork Skills</h3>
+                        <p>I thrive in team settings. The opportunity to bounce ideas and energy off others is not only
+                            essential for producing remarkable results but also makes the journey enjoyable. "If you
+                            want to go fast, go alone; if you want to go far, go together."</p>
+                        <p>I am a fair team member, understanding and never falling into any of the classic spiteful
+                            traps that can arise from communication breakdowns. I believe the first step to being a fair
+                            team member is being fair with oneself. I understand that some people's strengths are in areas
+                            other than communication and teamwork (often highly technical individuals), and I aim to
+                            make their teamwork experience as easy and enjoyable as possible.</p>
+                        <p>Throughout my University career I have thoroughly enjoyed working in groups. On multiple
+                            occasions I have had past group members reach out to me once they realised that I am also
+                            enrolled in the same group based subject as them!</p>
+                    </div>
+                    <br>
+                    <div class="section" id="site-details">
+                        <h3>Site Details</h3>
+                        <p>I created this site with plain css and html as a return to simplicity. The site is hosted for free by <a
+                                href="https://pages.github.com/">github pages</a>. </p>
+                    </div>
+                    <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+                    <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+                    <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+                    <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+                </section>
+            </div>
+        </div>
+        <footer>
+            <p>0498044191 - robbie.thompsonator@gmail.com</p>
+        </footer>
 </body>
 
 </html>

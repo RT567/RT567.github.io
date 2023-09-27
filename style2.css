@@ -39,21 +39,34 @@ footer {
     bottom: 0;
 }
 
-@keyframes jitter {
-    0% { transform: translate(0, 0); }
-    25% { transform: translate(1px, 1px); }
-    50% { transform: translate(0, 1px); }
-    75% { transform: translate(1px, 0); }
-    100% { transform: translate(0, 0); }
+.main-flex-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 }
 
-.jitter-text::after {
-    content: attr(data-text);
+#sticky-nav {
+    width: 200px;
+    position: sticky;
+    top: 200px;
+}
+
+.nav-content {
+    padding: 1em;
+    text-align: left;
+}
+
+#sticky-nav a {
     display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    animation: jitter 0.1s infinite;
+    margin-bottom: 1em;
+    color: #333;
+    text-decoration: none;
 }
 
+#sticky-nav a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    padding-left: 20px; /* Adjust as needed */
+}
