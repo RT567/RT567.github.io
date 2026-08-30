@@ -18,7 +18,16 @@ th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute
 button.seek{font:inherit;font-family:ui-monospace,Menlo,monospace;background:none;border:1px solid var(--line);border-radius:4px;padding:2px 8px;cursor:pointer;color:var(--fg)}button.seek:hover{border-color:var(--acc);color:var(--acc)}
 .badge{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;border:1px solid;white-space:nowrap}
 .high{color:var(--high);border-color:var(--high)}.mid{color:var(--med);border-color:var(--med)}.low{color:var(--low);border-color:var(--low)}
-.official{color:var(--muted);border-color:var(--line)}.ready{color:var(--high);border-color:var(--high)}
+.official{color:var(--high);border-color:var(--high)}
+.gen-box{display:inline-block;position:relative;width:118px;height:30px;overflow:hidden;border:1px solid var(--line);border-radius:8px;perspective:160px;vertical-align:middle}
+.gen-x{position:absolute;left:0;top:0;animation:genx 3.7s ease-in-out infinite alternate}.gen-y{animation:geny 2.9s ease-in-out infinite alternate}
+.gen{display:inline-block;font-weight:900;font-size:13px;letter-spacing:.02em;padding:0 2px;line-height:30px;transform-style:preserve-3d;
+ background:linear-gradient(100deg,#1f4fd8,#19c3d6,#7a2bd6,#e6198f,#ff5a1f,#f2b705,#12a86b,#1f4fd8);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+ animation:genspin 5s ease-in-out infinite,genshine 2.5s linear infinite;text-shadow:0 0 1px rgba(255,255,255,.15)}
+@keyframes genx{from{transform:translateX(2px)}to{transform:translateX(44px)}}@keyframes geny{from{transform:translateY(-1px)}to{transform:translateY(1px)}}
+@keyframes genspin{0%{transform:rotateY(-28deg) rotateX(8deg)}50%{transform:rotateY(28deg) rotateX(-8deg)}100%{transform:rotateY(-28deg) rotateX(8deg)}}
+@keyframes genshine{from{background-position:0% 0}to{background-position:300% 0}}
+@media(prefers-reduced-motion:reduce){.gen-x,.gen-y,.gen{animation:none}}
 .artist{font-weight:600}.title{color:var(--muted)}tr.playing td{background:rgba(228,68,42,.08)}tr.playing button.seek{border-color:var(--acc);color:var(--acc)}
 .links{font-size:12px;margin-top:3px}.links a.search{color:var(--muted)}.links a.search:hover{color:var(--acc)}
 details{margin-top:28px}summary{cursor:pointer;font-weight:600}pre{background:rgba(127,127,127,.08);padding:12px;border-radius:6px;overflow-x:auto;font-size:12px;white-space:pre-wrap}
@@ -81,12 +90,13 @@ async function viewDay(date){const eps=(await loadIndex()).filter(e=>e.date===da
   if(!eps.length){app.replaceChildren(crumbs(),h('p',{},'Nothing on that day.'));return;}
   const list=eps.map(e=>{let link,sub,right='';
     if(e.status==='generated'){link=h('a',{href:`#/ep/${e.slug}`},e.title);sub=h('span',{class:'muted'},`${e.n_tracks} tracks`,e.n_official?[' · ',h('a',{href:fbiUrl(e),target:'_blank',rel:'noopener'},'official tracklist ↗')]:null);
-      right=e.eval?h('span',{class:'muted'},`found ${Math.round(e.eval.recall*100)}% of the official tracks`):h('span',{class:'badge ready'},'tracklist ready');}
+      right=h('span',{},e.eval?h('span',{class:'muted'},`found ${Math.round(e.eval.recall*100)}% of the official tracks `):null,genBadge());}
     else if(e.status==='official'){link=h('a',{href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},`official tracklist on fbi.radio · ${e.n_official} tracks`);right=h('span',{class:'badge official'},'official');}
     else{link=h('a',{class:'plain',href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},'no tracklist');}
     return h('div',{class:'ep'},h('span',{class:'t'},e.time),h('span',{},link,' ',h('span',{class:'muted'},e.hosts||''),h('br'),sub),right);});
   app.replaceChildren(crumbs(),h('h1',{},eps[0].day,' ',h('small',{},`${eps.length} show${eps.length!==1?'s':''}`)),...list);
 }
+function genBadge(){return h('span',{class:'gen-box'},h('span',{class:'gen-x'},h('span',{class:'gen-y'},h('span',{class:'gen'},'generated'))));}
 function crumbs(...extra){return h('nav',{class:'crumbs'},h('a',{class:'btn',href:'#/'},'‹ All dates'),...extra);}
 async function viewEp(slug){let ep;try{ep=await loadEp(slug);}catch(e){app.replaceChildren(crumbs(),h('p',{},'No tracklist here for that show.'));return;}
   const rows=ep.rows.map(r=>{const tr=h('tr',{'data-t':r.t});
