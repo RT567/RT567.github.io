@@ -84,7 +84,7 @@ async function viewDay(date){const eps=(await loadIndex()).filter(e=>e.date===da
   const list=eps.map(e=>{let link,sub,right='';
     if(e.status==='generated'){link=h('a',{href:`#/ep/${e.slug}`},e.title);sub=h('span',{class:'muted'},`${e.n_tracks} tracks`,e.n_official?[' · ',h('a',{href:fbiUrl(e),target:'_blank',rel:'noopener'},'official tracklist ↗')]:null);
       right=genBadge();}
-    else if(e.status==='official'){link=h('a',{href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},`official tracklist on fbi.radio · ${e.n_official} tracks`);right=h('span',{class:'badge official'},'official');}
+    else if(e.status==='official'){link=h('a',{href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},`${e.n_official} tracks`);right=h('span',{class:'badge official'},'official');}
     else{link=h('a',{class:'plain',href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},'no tracklist');}
     return h('div',{class:'ep'},h('span',{class:'t'},e.time),h('span',{},link,' ',h('span',{class:'muted'},e.hosts||''),h('br'),sub),right);});
   app.replaceChildren(crumbs(),h('h1',{},eps[0].day,' ',h('small',{},`${eps.length} show${eps.length!==1?'s':''}`)),...list);
