@@ -103,10 +103,10 @@ async function viewEp(slug){let ep;try{ep=await loadEp(slug);}catch(e){app.repla
     h('p',{class:'legend',html:"<b>high</b> = recognised from the audio and the presenter named it too · <b>mid</b> = recognised from the audio, or named by the presenter and found online · <b>low</b> = our best guess from what the presenter said; the time is approximate."}),
     ep.transcripts.length?h('details',{},h('summary',{},'What the presenter said on air'),...ep.transcripts.map(t=>h('div',{class:'mb'},h('span',{class:'t'},`${t.start}–${t.end}`),h('br'),t.text))):null,
     h('details',{},h('summary',{},'Tracklist data (for sending to FBi)'),h('pre',{},JSON.stringify(ep.fbi_json,null,1))));
-  syncPlayer();
+  if(ep.audio_url)loadPlayer(ep);else syncPlayer();
 }
-function play(ep,t){if(player.ep?.slug!==ep.slug){player.ep=ep;player.rows=ep.rows.filter(r=>r.t!==null);audio.src=ep.audio_url;document.body.classList.add('has-player');playerEl.hidden=false;}
-  const go=()=>{audio.currentTime=t;audio.play();};if(audio.readyState>=1)go();else{audio.addEventListener('loadedmetadata',go,{once:true});audio.load();}syncPlayer();}
+function loadPlayer(ep){if(player.ep?.slug===ep.slug)return;player.ep=ep;player.rows=ep.rows.filter(r=>r.t!==null);audio.src=ep.audio_url;document.body.classList.add('has-player');playerEl.hidden=false;syncPlayer();}
+function play(ep,t){loadPlayer(ep);const go=()=>{audio.currentTime=t;audio.play();};if(audio.readyState>=1)go();else{audio.addEventListener('loadedmetadata',go,{once:true});audio.load();}syncPlayer();}
 function closePlayer(){audio.pause();audio.removeAttribute('src');audio.load();player.ep=null;playerEl.hidden=true;document.body.classList.remove('has-player');}
 closeBtn.onclick=closePlayer;
 function syncPlayer(){if(!player.ep)return;const onOwn=location.hash===`#/ep/${player.ep.slug}`;closeBtn.hidden=onOwn;
@@ -117,30 +117,30 @@ audio.addEventListener('timeupdate',syncPlayer);
 function nav(hash){location.hash=hash;}
 function route(){const hsh=location.hash||'#/';let m;
   if((m=/^#\/ep\/([\w-]+)$/.exec(hsh)))viewEp(m[1]);else if((m=/^#\/day\/(\d{4}-\d{2}-\d{2})$/.exec(hsh)))viewDay(m[1]);else if((m=/^#\/(\d{4}-\d{2})$/.exec(hsh)))viewCalendar(m[1]);else viewCalendar();
-  window.scrollTo(0,0);}
+  window.scrollTo(0,0);syncPlayer();}
 window.addEventListener('hashchange',route);route();
 </script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module">
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){try{
   const THREE=await import('three');const{FontLoader}=await import('three/addons/loaders/FontLoader.js');const{TextGeometry}=await import('three/addons/geometries/TextGeometry.js');const{RoomEnvironment}=await import('three/addons/environments/RoomEnvironment.js');
-  const canvas=document.getElementById('bg'),renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const canvas=document.getElementById('bg'),renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});const mobile=innerWidth<700||matchMedia('(pointer: coarse)').matches;renderer.setPixelRatio(mobile?1:Math.min(devicePixelRatio,2));
   const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,1,0.1,100);cam.position.z=30;
   // 90s chrome: a colourful equirectangular gradient as the reflection environment
   const ec=document.createElement('canvas');ec.width=1024;ec.height=512;const g=ec.getContext('2d');
-  const grad=g.createLinearGradient(0,0,0,512);[[0,'#1b1464'],[0.18,'#2a7fff'],[0.34,'#9ff0ff'],[0.44,'#ffffff'],[0.5,'#ff3cac'],[0.56,'#ff8a00'],[0.68,'#ffe259'],[0.8,'#2bd47d'],[1,'#12002e']].forEach(([o,c])=>grad.addColorStop(o,c));
+  const grad=g.createLinearGradient(0,0,0,512);[[0,'#12063f'],[0.16,'#1f4fd8'],[0.32,'#19c3d6'],[0.42,'#7a2bd6'],[0.5,'#e6198f'],[0.58,'#ff5a1f'],[0.68,'#f2b705'],[0.8,'#12a86b'],[1,'#0b0426']].forEach(([o,c])=>grad.addColorStop(o,c));
   g.fillStyle=grad;g.fillRect(0,0,1024,512);
-  for(let i=0;i<14;i++){const x=Math.random()*1024,w=6+Math.random()*40;const sg=g.createLinearGradient(x,0,x+w,0);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(0.5,'rgba(255,255,255,0.95)');sg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=sg;g.fillRect(x,0,w,512);}
+  for(let i=0;i<8;i++){const x=Math.random()*1024,w=6+Math.random()*30;const sg=g.createLinearGradient(x,0,x+w,0);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(0.5,'rgba(255,255,255,0.45)');sg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=sg;g.fillRect(x,0,w,512);}
   const envTex=new THREE.CanvasTexture(ec);envTex.mapping=THREE.EquirectangularReflectionMapping;envTex.colorSpace=THREE.SRGBColorSpace;
   const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromEquirectangular(envTex).texture;pmrem.dispose();
   const dark=matchMedia('(prefers-color-scheme: dark)').matches;
   scene.add(new THREE.AmbientLight(0xffffff,dark?0.5:0.9));const key=new THREE.DirectionalLight(0xffffff,dark?2.2:1.6);key.position.set(-3,4,6);scene.add(key);const rim=new THREE.DirectionalLight(0xe4442a,1.2);rim.position.set(4,-2,-3);scene.add(rim);
   const font=await new FontLoader().loadAsync('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/fonts/helvetiker_bold.typeface.json');
-  const geo=new TextGeometry('FBi',{font,size:6,height:3.2,curveSegments:6,bevelEnabled:true,bevelThickness:0.25,bevelSize:0.18,bevelSegments:2});
-  geo.center();const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:0.05,envMapIntensity:1.4}));scene.add(mesh);
+  const geo=new TextGeometry('FBi',{font,size:6,height:3.2,curveSegments:24,bevelEnabled:true,bevelThickness:0.25,bevelSize:0.18,bevelSegments:6});
+  geo.center();const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:0.08,envMapIntensity:1.1}));scene.add(mesh);
   geo.computeBoundingBox();const bb=geo.boundingBox;const corners=[];for(const x of[bb.min.x,bb.max.x])for(const y of[bb.min.y,bb.max.y])for(const z of[bb.min.z,bb.max.z])corners.push(new THREE.Vector3(x,y,z));
-  let vw=1,vh=1,lastInset=-1;function inset(){const f=document.querySelector('footer'),p=document.getElementById('player');return (f?f.offsetHeight:0)+(p&&!p.hidden?p.offsetHeight:0);}
-  function resize(){const w=innerWidth,h=Math.max(200,innerHeight-inset());lastInset=inset();canvas.style.height=h+'px';renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();
+  let vw=1,vh=1;function inset(){const f=document.querySelector('footer'),p=document.getElementById('player');return (f?f.offsetHeight:0)+(p&&!p.hidden?p.offsetHeight:0);}
+  function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();
     vh=2*Math.tan(cam.fov*Math.PI/360)*cam.position.z;vw=vh*cam.aspect;const target=Math.min(vw*0.42,vh*0.5);mesh.scale.setScalar(target/(bb.max.x-bb.min.x));}
   addEventListener('resize',resize);resize();
   const pos=new THREE.Vector3(-vw*0.2,vh*0.15,0),vel=new THREE.Vector3(0.028,0.021,0.012);let last=performance.now();
@@ -149,14 +149,15 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){try{
   function screenBox(){mesh.updateMatrixWorld();let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
     for(const c of corners){v.copy(c).applyMatrix4(mesh.matrixWorld).project(cam);minX=Math.min(minX,v.x);maxX=Math.max(maxX,v.x);minY=Math.min(minY,v.y);maxY=Math.max(maxY,v.y);}
     return{minX,maxX,minY,maxY};}
-  function tick(now){const dt=Math.min(50,now-last)/16;last=now;if(inset()!==lastInset)resize();
+  let acc=0;const frameMs=mobile?32:0;function tick(now){requestAnimationFrame(tick);if(document.hidden){last=now;return;}acc+=now-last;last=now;if(acc<frameMs)return;const dt=Math.min(50,acc)/16;acc=0;
     pos.addScaledVector(vel,dt);if(pos.z<-8){pos.z=-8;vel.z=Math.abs(vel.z);}if(pos.z>6){pos.z=6;vel.z=-Math.abs(vel.z);}
     mesh.position.copy(pos);mesh.rotation.x+=spin.x*dt;mesh.rotation.y+=spin.y*dt;mesh.rotation.z+=spin.z*dt;
     // bounce on the projected bounding box: NDC runs -1..1, so 1 NDC unit = half the visible width/height at this depth
     const b=screenBox(),halfW=Math.tan(cam.fov*Math.PI/360)*(cam.position.z-pos.z)*cam.aspect,halfH=Math.tan(cam.fov*Math.PI/360)*(cam.position.z-pos.z);
     if(b.maxX>1){pos.x-=(b.maxX-1)*halfW;vel.x=-Math.abs(vel.x);}else if(b.minX<-1){pos.x+=(-1-b.minX)*halfW;vel.x=Math.abs(vel.x);}
-    if(b.maxY>1){pos.y-=(b.maxY-1)*halfH;vel.y=-Math.abs(vel.y);}else if(b.minY<-1){pos.y+=(-1-b.minY)*halfH;vel.y=Math.abs(vel.y);}
-    mesh.position.copy(pos);renderer.render(scene,cam);requestAnimationFrame(tick);}
+    const floor=-1+2*inset()/innerHeight;  // the footer (and player) are the bottom edge
+    if(b.maxY>1){pos.y-=(b.maxY-1)*halfH;vel.y=-Math.abs(vel.y);}else if(b.minY<floor){pos.y+=(floor-b.minY)*halfH;vel.y=Math.abs(vel.y);}
+    mesh.position.copy(pos);renderer.render(scene,cam);}
   requestAnimationFrame(tick);
 }catch(e){console.warn('background off:',e);}}
 </script></body></html>
