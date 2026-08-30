@@ -1,8 +1,7 @@
 <!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
 <title>FBi Radio auto tracklists</title>
 <style>
-:root{--bg:#fffdf7;--fg:#1a1a1a;--muted:#6b6b6b;--line:#e6e2d6;--acc:#e4442a;--high:#1f8a4c;--med:#c48a00;--low:#9a9a9a}
-@media(prefers-color-scheme:dark){:root{--bg:#141414;--fg:#ececec;--muted:#9a9a9a;--line:#2c2c2c}}
+:root{color-scheme:dark;--bg:#141414;--fg:#ececec;--muted:#9a9a9a;--line:#2c2c2c;--acc:#e4442a;--high:#2fb36a;--med:#e0a51a;--low:#9a9a9a}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 .wrap{max-width:960px;margin:0 auto;padding:24px 20px 80px}body.has-player .wrap{padding-bottom:120px}
 h1{font-size:28px;margin:0 0 4px}
@@ -23,8 +22,7 @@ button.seek{font:inherit;font-family:ui-monospace,Menlo,monospace;background:non
 .badge.generated .gtext{background:linear-gradient(100deg,#1f4fd8,#19c3d6,#7a2bd6,#e6198f,#ff5a1f,#f2b705,#12a86b);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
 .artist{font-weight:600}.title{color:var(--muted)}tr.playing td{background:rgba(228,68,42,.08)}tr.playing button.seek{border-color:var(--acc);color:var(--acc)}
 .links{display:flex;gap:6px;margin-top:4px}.links a.icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:24px;border:1px solid var(--line);border-radius:6px}
-.links a.icon.bandcamp{color:#1da0c3}.links a.icon.youtube{color:#ff0000}.links a.icon.soundcloud{color:#ff5500}.links a.icon.spotify{color:#1db954}.links a.icon.apple{color:#fa243c}.links a.icon.deezer{color:#a238ff}.links a.icon.shazam{color:#0088ff}.links a.icon.discogs{color:#333}.links a.icon.link{color:var(--acc)}
-@media(prefers-color-scheme:dark){.links a.icon.discogs{color:#eee}}
+.links a.icon.bandcamp{color:#1da0c3}.links a.icon.youtube{color:#ff0000}.links a.icon.soundcloud{color:#ff5500}.links a.icon.spotify{color:#1db954}.links a.icon.apple{color:#fa243c}.links a.icon.deezer{color:#a238ff}.links a.icon.shazam{color:#0088ff}.links a.icon.discogs{color:#eee}.links a.icon.link{color:var(--acc)}
 .links a.icon.search{opacity:.45;filter:saturate(.7)}.links a.icon:hover{border-color:currentColor;opacity:1;filter:none}
 details{margin-top:28px}summary{cursor:pointer;font-weight:600}pre{background:rgba(127,127,127,.08);padding:12px;border-radius:6px;overflow-x:auto;font-size:12px;white-space:pre-wrap}
 .mb{margin:10px 0;padding:10px 12px;border-left:3px solid var(--line)}.mb .t{color:var(--muted)}
@@ -49,7 +47,7 @@ a.day.has{color:var(--fg);text-decoration:none;border-color:var(--acc);backgroun
 button.close{font:inherit;font-size:18px;line-height:1;background:none;border:1px solid var(--line);border-radius:50%;width:28px;height:28px;color:var(--muted);cursor:pointer}button.close:hover{border-color:var(--acc);color:var(--acc)}
 @media(max-width:600px){.wrap{padding:16px 12px 60px}h1{font-size:22px}h1 small{display:block;font-size:14px}
  thead{display:none}table,tbody{display:block}tr{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--line)}
- td{border:0;padding:0}td:nth-child(3){grid-column:2;margin-top:2px}.ep{grid-template-columns:1fr;gap:2px}.stats{gap:10px}
+ td{border:0;padding:0}td:nth-child(3){grid-column:2;margin-top:2px}.ep{grid-template-columns:1fr;gap:4px;justify-items:start}.ep>.badge{justify-self:start}.stats{gap:10px}
  .day{min-height:40px;padding:4px}.player{padding:6px 10px 8px}}
 </style></head><body>
 <canvas class='bg' id='bg' aria-hidden='true'></canvas>
@@ -89,7 +87,7 @@ async function viewDay(date){const eps=(await loadIndex()).filter(e=>e.date===da
       right=genBadge();}
     else if(e.status==='official'){link=h('a',{href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},`${e.n_official} tracks`);right=h('span',{class:'badge official'},'official');}
     else{link=h('a',{class:'plain',href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},'no tracklist');}
-    return h('div',{class:'ep'},h('span',{class:'t'},e.time),h('span',{},link,' ',h('span',{class:'muted'},e.hosts||''),h('br'),sub),right);});
+    return h('div',{class:'ep'},h('span',{class:'t'},e.time),h('span',{},link,' ',h('span',{class:'muted'},hostsShort(e.hosts)),h('br'),sub),right);});
   app.replaceChildren(crumbs(),h('h1',{},eps[0].day,' ',h('small',{},`${eps.length} show${eps.length!==1?'s':''}`)),...list);
 }
 const ICONS={
@@ -104,6 +102,7 @@ const ICONS={
  link:"<svg viewBox='0 0 24 24' width='18' height='18' aria-hidden='true'><path fill='none' stroke='currentColor' stroke-width='2' d='M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.5 1.5M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.5-1.5'/></svg>"};
 const NAMES_SVC={bandcamp:'Bandcamp',youtube:'YouTube',soundcloud:'SoundCloud',spotify:'Spotify',apple:'Apple Music',deezer:'Deezer',discogs:'Discogs',shazam:'Shazam'};
 function linkIcon(l){const svc=l.label.replace('search ','');const a=h('a',{class:'icon '+(ICONS[svc]?svc:'link')+(l.search?' search':''),href:l.url,target:'_blank',rel:'noopener',title:l.search?`Search ${NAMES_SVC[svc]||svc} for this track`:`Open on ${NAMES_SVC[svc]||svc}`,'aria-label':l.search?`search ${svc}`:svc});a.innerHTML=ICONS[svc]||ICONS.link;return a;}
+function hostsShort(h){const n=(h||'').split(',').map(x=>x.trim()).filter(Boolean);return n.length>4?n.slice(0,4).join(', ')+` & ${n.length-4} more`:n.join(', ');}
 function genBadge(){return h('span',{class:'badge generated'},h('span',{class:'gtext'},'generated'));}
 function crumbs(...extra){return h('nav',{class:'crumbs'},h('a',{class:'btn',href:'#/'},'‹ All dates'),...extra);}
 async function viewEp(slug){let ep;try{ep=await loadEp(slug);}catch(e){app.replaceChildren(crumbs(),h('p',{},'No tracklist here for that show.'));return;}
@@ -124,7 +123,7 @@ function play(ep,t){loadPlayer(ep);const go=()=>{audio.currentTime=t;audio.play(
 function closePlayer(){audio.pause();audio.removeAttribute('src');audio.load();player.ep=null;playerEl.hidden=true;document.body.classList.remove('has-player');}
 closeBtn.onclick=closePlayer;
 function syncPlayer(){if(!player.ep)return;const onOwn=location.hash===`#/ep/${player.ep.slug}`;closeBtn.hidden=onOwn;
-  let cur=null;for(const r of player.rows)if(r.t<=audio.currentTime)cur=r;
+  let cur=null;if(!(audio.paused&&audio.currentTime===0))for(const r of player.rows)if(r.t<=audio.currentTime)cur=r;
   if(onOwn)document.querySelectorAll('tr[data-t]').forEach(tr=>tr.classList.toggle('playing',cur&&+tr.dataset.t===cur.t));
   nowEl.replaceChildren(h('span',{},cur?h('span',{class:'now-artist'},cur.artist):h('span',{class:'now-artist'},player.ep.title),' ',h('span',{class:'now-title'},cur?cur.title||'':player.ep.hosts),onOwn?null:[' · ',h('a',{href:`#/ep/${player.ep.slug}`},player.ep.title+' ›')]));}
 audio.addEventListener('timeupdate',syncPlayer);
@@ -147,7 +146,7 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){try{
   for(let i=0;i<8;i++){const x=Math.random()*1024,w=6+Math.random()*30;const sg=g.createLinearGradient(x,0,x+w,0);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(0.5,'rgba(255,255,255,0.45)');sg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=sg;g.fillRect(x,0,w,512);}
   const envTex=new THREE.CanvasTexture(ec);envTex.mapping=THREE.EquirectangularReflectionMapping;envTex.colorSpace=THREE.SRGBColorSpace;
   const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromEquirectangular(envTex).texture;pmrem.dispose();
-  const dark=matchMedia('(prefers-color-scheme: dark)').matches;
+  const dark=true;
   scene.add(new THREE.AmbientLight(0xffffff,dark?0.5:0.9));const key=new THREE.DirectionalLight(0xffffff,dark?2.2:1.6);key.position.set(-3,4,6);scene.add(key);const rim=new THREE.DirectionalLight(0xe4442a,1.2);rim.position.set(4,-2,-3);scene.add(rim);
   const font=await new FontLoader().loadAsync('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/fonts/helvetiker_bold.typeface.json');
   const geo=new TextGeometry('FBi',{font,size:6,height:3.2,curveSegments:24,bevelEnabled:true,bevelThickness:0.25,bevelSize:0.18,bevelSegments:6});
