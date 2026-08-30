@@ -105,10 +105,7 @@ async function viewEp(slug){let ep;try{ep=await loadEp(slug);}catch(e){app.repla
     h('div',{class:'stats'},h('span',{},`${ep.rows.length} tracks`),h('span',{},`${ep.counts.high} high confidence`),h('span',{},`${ep.counts.mid} mid`),h('span',{},`${ep.counts.low} low`)),
     ev?h('div',{class:'stats'},h('span',{},h('b',{},'Checked against the official tracklist:')),h('span',{},`found ${Math.round(ev.recall*100)}% of its tracks`),h('span',{},`${Math.round(ev.precision*100)}% of ours are on it`),ev.timestamp_in_track!=null?h('span',{},`${Math.round(ev.timestamp_in_track*100)}% of times land in the right track`):null):null,
     ep.audio_url?h('p',{class:'note'},'Click a time to jump to that part of the show. The player stays at the bottom of the screen.'):null,
-    h('table',{},h('thead',{},h('tr',{},h('th',{},'time'),h('th',{},'track'),h('th',{},'confidence'))),h('tbody',{},...rows)),
-    h('p',{class:'legend',html:"<b>high</b> = recognised from the audio and the presenter named it too · <b>mid</b> = recognised from the audio, or named by the presenter and found online · <b>low</b> = our best guess from what the presenter said; the time is approximate."}),
-    ep.transcripts.length?h('details',{},h('summary',{},'What the presenter said on air'),...ep.transcripts.map(t=>h('div',{class:'mb'},h('span',{class:'t'},`${t.start}–${t.end}`),h('br'),t.text))):null,
-    h('details',{},h('summary',{},'Tracklist data (for sending to FBi)'),h('pre',{},JSON.stringify(ep.fbi_json,null,1))));
+    h('table',{},h('thead',{},h('tr',{},h('th',{},'time'),h('th',{},'track'),h('th',{},'confidence'))),h('tbody',{},...rows)));
   if(ep.audio_url)loadPlayer(ep);else syncPlayer();
 }
 function loadPlayer(ep){if(player.ep?.slug===ep.slug)return;player.ep=ep;player.rows=ep.rows.filter(r=>r.t!==null);audio.src=ep.audio_url;document.body.classList.add('has-player');playerEl.hidden=false;syncPlayer();}
