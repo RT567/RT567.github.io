@@ -1,30 +1,118 @@
 <!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>FBi auto tracklists</title><style>
-:root{--bg:#fffdf7;--fg:#1a1a1a;--muted:#6b6b6b;--line:#e6e2d6;--acc:#e4442a;--high:#1f8a4c;--med:#c48a00;--low:#9a9a9a;--asr:#3b5bdb}
+<title>FBi Radio auto tracklists</title>
+<style>
+:root{--bg:#fffdf7;--fg:#1a1a1a;--muted:#6b6b6b;--line:#e6e2d6;--acc:#e4442a;--high:#1f8a4c;--med:#c48a00;--low:#9a9a9a}
 @media(prefers-color-scheme:dark){:root{--bg:#141414;--fg:#ececec;--muted:#9a9a9a;--line:#2c2c2c}}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-.wrap{max-width:960px;margin:0 auto;padding:24px 20px 80px}
-h1{font-size:28px;margin:0 0 4px}h1 small{font-weight:400;color:var(--muted);font-size:16px}
-a{color:var(--acc)}.muted{color:var(--muted)}
+.wrap{max-width:960px;margin:0 auto;padding:24px 20px 80px}body.has-player .wrap{padding-bottom:120px}
+h1{font-size:28px;margin:0 0 4px}h1 small{font-weight:400;color:var(--muted);font-size:16px}h2{font-size:18px;margin:0}
+a{color:var(--acc)}.muted{color:var(--muted)}a.plain{color:var(--fg);text-decoration:none}a.plain:hover{color:var(--acc)}
+.crumbs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+a.btn{display:inline-block;padding:7px 14px;border:1px solid var(--line);border-radius:20px;color:var(--fg);text-decoration:none;font-size:14px;background:rgba(127,127,127,.06)}a.btn:hover{border-color:var(--acc);color:var(--acc)}
 table{width:100%;border-collapse:collapse;margin-top:16px}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
 .t{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:nowrap}
-button.seek{font:inherit;font-family:ui-monospace,Menlo,monospace;background:none;border:1px solid var(--line);border-radius:4px;padding:2px 8px;cursor:pointer;color:var(--fg)}
-button.seek:hover{border-color:var(--acc);color:var(--acc)}
+button.seek{font:inherit;font-family:ui-monospace,Menlo,monospace;background:none;border:1px solid var(--line);border-radius:4px;padding:2px 8px;cursor:pointer;color:var(--fg)}button.seek:hover{border-color:var(--acc);color:var(--acc)}
 .badge{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;border:1px solid;white-space:nowrap}
-.high{color:var(--high);border-color:var(--high)}.medium{color:var(--med);border-color:var(--med)}.low{color:var(--low);border-color:var(--low)}
-.src-asr{color:var(--asr);border-color:var(--asr)}.src-both{color:var(--high);border-color:var(--high)}.src-fingerprint{color:var(--muted);border-color:var(--line)}
-.artist{font-weight:600}.title{color:var(--muted)}
-audio{width:100%;margin:12px 0}
-details{margin-top:28px}summary{cursor:pointer;font-weight:600}
-pre{background:rgba(127,127,127,.08);padding:12px;border-radius:6px;overflow-x:auto;font-size:12px;white-space:pre-wrap}
+.high{color:var(--high);border-color:var(--high)}.mid{color:var(--med);border-color:var(--med)}.low{color:var(--low);border-color:var(--low)}
+.official{color:var(--muted);border-color:var(--line)}.ready{color:var(--high);border-color:var(--high)}
+.artist{font-weight:600}.title{color:var(--muted)}tr.playing td{background:rgba(228,68,42,.08)}tr.playing button.seek{border-color:var(--acc);color:var(--acc)}
+.links{font-size:12px;margin-top:3px}.links a.search{color:var(--muted)}.links a.search:hover{color:var(--acc)}
+details{margin-top:28px}summary{cursor:pointer;font-weight:600}pre{background:rgba(127,127,127,.08);padding:12px;border-radius:6px;overflow-x:auto;font-size:12px;white-space:pre-wrap}
 .mb{margin:10px 0;padding:10px 12px;border-left:3px solid var(--line)}.mb .t{color:var(--muted)}
 .stats{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0;color:var(--muted);font-size:13px}
 .ep{padding:10px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:baseline}
-.legend{font-size:13px;color:var(--muted);margin-top:8px}
-.note{font-size:13px;color:var(--muted);font-style:italic}
-</style></head><body><div class='wrap'>
-<h1>FBi Radio auto tracklists <small>experimental</small></h1>
-<p class='muted'>Tracklists generated automatically from <a href='https://www.fbi.radio'>fbi.radio</a> episode recordings: audio fingerprinting for the music, speech recognition of the presenters' mic breaks for everything the fingerprinter doesn't know. Not affiliated with FBi. Episodes that already have an official tracklist are included to measure accuracy.</p>
-<div class='ep'><span class='t'>2026-08-23</span><span><a href='episodes/loose-joints-23rd-august-2026.html'>Loose Joints</a> <span class='muted'>Tyson Koh</span><br><span class='muted'>25 tracks</span></span><span class='badge src-asr'>no official tracklist</span></div>
-</div></body></html>
+.legend{font-size:13px;color:var(--muted);margin-top:8px}footer{position:fixed;left:0;right:0;bottom:0;padding:8px 12px;font-size:13px;color:var(--muted);text-align:center;background:var(--bg);border-top:1px solid var(--line)}
+body.has-player footer{bottom:74px;border-top:0;background:transparent}.note{font-size:13px;color:var(--muted);font-style:italic}
+.month{margin-top:20px}.monthnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+button.nav{font:inherit;font-size:22px;line-height:1;background:none;border:1px solid var(--line);border-radius:6px;color:var(--fg);padding:4px 14px;cursor:pointer}button.nav:hover{border-color:var(--acc);color:var(--acc)}
+button.nav[disabled]{opacity:.35;cursor:not-allowed}button.nav[disabled]:hover{border-color:var(--line);color:var(--fg)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.wd{font-size:11px;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
+.day{min-height:48px;border:1px solid var(--line);border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:2px;color:var(--muted)}.day.empty{border-color:transparent}.day .n{font-weight:600}
+a.day.has{color:var(--fg);text-decoration:none;border-color:var(--acc);background:rgba(228,68,42,.06)}a.day.has:hover{background:rgba(228,68,42,.16)}
+.player{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(0,0,0,.12);padding:6px 20px 8px;z-index:10}
+.player-inner{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:3px}
+.player .top{display:flex;align-items:center;gap:10px}.player .now{flex:1;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.player .now-artist{font-weight:600}.player .now-title{color:var(--muted)}.player .now a{color:var(--muted);text-decoration:none}.player .now a:hover{color:var(--acc)}
+.player audio{height:32px;width:100%}
+button.close{font:inherit;font-size:18px;line-height:1;background:none;border:1px solid var(--line);border-radius:50%;width:28px;height:28px;color:var(--muted);cursor:pointer}button.close:hover{border-color:var(--acc);color:var(--acc)}
+@media(max-width:600px){.wrap{padding:16px 12px 60px}h1{font-size:22px}h1 small{display:block;font-size:14px}
+ thead{display:none}table,tbody{display:block}tr{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--line)}
+ td{border:0;padding:0}td:nth-child(3){grid-column:2;margin-top:2px}.ep{grid-template-columns:1fr;gap:2px}.stats{gap:10px}
+ .day{min-height:40px;padding:4px}.player{padding:6px 10px 8px}}
+</style></head><body>
+<div class='wrap' id='app'></div>
+<div class='player' id='player' hidden><div class='player-inner'><div class='top'><div class='now' id='now'></div><button class='close' id='close' title='Stop and close the player' hidden>×</button></div><audio id='audio' controls preload='none'></audio></div></div>
+<script>
+const MIN=new Date(2026,7,1);
+const NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const app=document.getElementById('app'),audio=document.getElementById('audio'),playerEl=document.getElementById('player'),nowEl=document.getElementById('now'),closeBtn=document.getElementById('close');
+let EPS=null;const CACHE={};const player={ep:null,rows:[]};
+const h=(tag,attrs={},...kids)=>{const el=document.createElement(tag);for(const[k,v]of Object.entries(attrs)){if(k==='html')el.innerHTML=v;else if(k.startsWith('on'))el.addEventListener(k.slice(2),v);else if(v!==null&&v!==undefined&&v!==false)el.setAttribute(k,v===true?'':v);}for(const kid of kids.flat())if(kid!==null&&kid!==undefined)el.append(kid.nodeType?kid:document.createTextNode(kid));return el;};
+const pad=n=>String(n).padStart(2,'0');
+const fbiUrl=e=>`https://www.fbi.radio/programs/${e.program}/episodes/${e.slug}`;
+async function loadIndex(){if(!EPS){EPS=await(await fetch('episodes.json')).json();}return EPS;}
+async function loadEp(slug){if(!CACHE[slug]){CACHE[slug]=await(await fetch(`episodes/${slug}.json`)).json();}return CACHE[slug];}
+function byDay(eps){const m={};for(const e of eps)(m[e.date]=m[e.date]||[]).push(e);return m;}
+
+async function viewCalendar(ym){const eps=await loadIndex(),days=byDay(eps);
+  let cur;if(ym){const[y,mo]=ym.split('-');cur=new Date(+y,+mo-1,1);}else{const latest=Object.keys(days).sort().pop();cur=latest?new Date(+latest.slice(0,4),+latest.slice(5,7)-1,1):new Date();}if(cur<MIN)cur=new Date(MIN);
+  const y=cur.getFullYear(),m=cur.getMonth();const atMin=cur<=MIN;
+  const grid=h('div',{class:'cal'});for(const w of['Mo','Tu','We','Th','Fr','Sa','Su'])grid.append(h('div',{class:'wd'},w));
+  const first=(new Date(y,m,1).getDay()+6)%7,n=new Date(y,m+1,0).getDate();for(let i=0;i<first;i++)grid.append(h('div',{class:'day empty'}));
+  for(let d=1;d<=n;d++){const k=`${y}-${pad(m+1)}-${pad(d)}`;grid.append(days[k]?h('a',{class:'day has',href:`#/day/${k}`},h('span',{class:'n'},d)):h('div',{class:'day'},h('span',{class:'n'},d)));}
+  app.replaceChildren(
+    h('h1',{},'FBi Radio auto tracklists'),
+    h('p',{class:'muted'},'Tracklists for ',h('a',{href:'https://www.fbi.radio'},'FBi Radio'),' shows that went to air without one, made automatically from the recording and from what the presenters say on air. Not affiliated with FBi. Pick a day, then a show. Shows that already have an official tracklist open on fbi.radio.'),
+    h('div',{class:'month'},h('div',{class:'monthnav'},
+      h('button',{class:'nav',disabled:atMin,title:atMin?"Sorry — nothing before August 2026, that's as far back as this goes":null,onclick:()=>{if(!atMin)nav(m===0?`#/${y-1}-12`:`#/${y}-${pad(m)}`)}},'‹'),
+      h('h2',{},`${NAMES[m]} ${y}`),
+      h('button',{class:'nav',onclick:()=>nav(m===11?`#/${y+1}-01`:`#/${y}-${pad(m+2)}`)},'›')),grid),
+    h('footer',{},'Site made by Robbie T for the love of the game'));
+}
+async function viewDay(date){const eps=(await loadIndex()).filter(e=>e.date===date).sort((a,b)=>a.airedAt.localeCompare(b.airedAt));
+  if(!eps.length){app.replaceChildren(crumbs(),h('p',{},'Nothing on that day.'));return;}
+  const list=eps.map(e=>{let link,sub,right='';
+    if(e.status==='generated'){link=h('a',{href:`#/ep/${e.slug}`},e.title);sub=h('span',{class:'muted'},`${e.n_tracks} tracks`,e.n_official?[' · ',h('a',{href:fbiUrl(e),target:'_blank',rel:'noopener'},'official tracklist ↗')]:null);
+      right=e.eval?h('span',{class:'muted'},`found ${Math.round(e.eval.recall*100)}% of the official tracks`):h('span',{class:'badge ready'},'tracklist ready');}
+    else if(e.status==='official'){link=h('a',{href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},`official tracklist on fbi.radio · ${e.n_official} tracks`);right=h('span',{class:'badge official'},'official');}
+    else{link=h('a',{class:'plain',href:fbiUrl(e),target:'_blank',rel:'noopener'},e.title+' ↗');sub=h('span',{class:'muted'},'no tracklist');}
+    return h('div',{class:'ep'},h('span',{class:'t'},e.time),h('span',{},link,' ',h('span',{class:'muted'},e.hosts||''),h('br'),sub),right);});
+  app.replaceChildren(crumbs(),h('h1',{},eps[0].day,' ',h('small',{},`${eps.length} show${eps.length!==1?'s':''}`)),...list);
+}
+function crumbs(...extra){return h('nav',{class:'crumbs'},h('a',{class:'btn',href:'#/'},'‹ All dates'),...extra);}
+async function viewEp(slug){let ep;try{ep=await loadEp(slug);}catch(e){app.replaceChildren(crumbs(),h('p',{},'No tracklist here for that show.'));return;}
+  const rows=ep.rows.map(r=>{const tr=h('tr',{'data-t':r.t});
+    tr.append(h('td',{},r.t!==null&&ep.audio_url?h('button',{class:'seek',onclick:()=>play(ep,r.t)},r.time):h('span',{class:'t'},r.time)),
+      h('td',{},h('span',{class:'artist'},r.artist),' ',h('span',{class:'title'},r.title||'(title unknown)'),
+        ...r.notes.map(n=>h('div',{class:'note'},n)),
+        h('div',{class:'links'},...r.links.flatMap((l,i)=>[i?' · ':null,h('a',{href:l.url,target:'_blank',rel:'noopener',class:l.search?'search':null},l.search?l.label:l.label+' ↗')]))),
+      h('td',{},h('span',{class:`badge ${r.conf}`},r.conf)));return tr;});
+  const ev=ep.eval;
+  app.replaceChildren(crumbs(h('a',{class:'btn',href:`#/day/${ep.date}`},'‹ '+ep.dayShort)),
+    h('h1',{},ep.title,' ',h('small',{},ep.date,ep.hosts?' · '+ep.hosts:'')),
+    h('p',{class:'muted'},'Tracklist made automatically from the recording · ',h('a',{href:ep.fbi_url,target:'_blank',rel:'noopener'},'listen on fbi.radio ↗'),ev?' · this show also has an official tracklist, used here to check our accuracy':' · this show has no official tracklist'),
+    h('div',{class:'stats'},h('span',{},`${ep.rows.length} tracks`),h('span',{},`${ep.counts.high} high confidence`),h('span',{},`${ep.counts.mid} mid`),h('span',{},`${ep.counts.low} low`)),
+    ev?h('div',{class:'stats'},h('span',{},h('b',{},'Checked against the official tracklist:')),h('span',{},`found ${Math.round(ev.recall*100)}% of its tracks`),h('span',{},`${Math.round(ev.precision*100)}% of ours are on it`),ev.timestamp_in_track!=null?h('span',{},`${Math.round(ev.timestamp_in_track*100)}% of times land in the right track`):null):null,
+    ep.audio_url?h('p',{class:'note'},'Click a time to jump to that part of the show. The player stays at the bottom of the screen.'):null,
+    h('table',{},h('thead',{},h('tr',{},h('th',{},'time'),h('th',{},'track'),h('th',{},'confidence'))),h('tbody',{},...rows)),
+    h('p',{class:'legend',html:"<b>high</b> = recognised from the audio and the presenter named it too · <b>mid</b> = recognised from the audio, or named by the presenter and found online · <b>low</b> = our best guess from what the presenter said; the time is approximate."}),
+    ep.transcripts.length?h('details',{},h('summary',{},'What the presenter said on air'),...ep.transcripts.map(t=>h('div',{class:'mb'},h('span',{class:'t'},`${t.start}–${t.end}`),h('br'),t.text))):null,
+    h('details',{},h('summary',{},'Tracklist data (for sending to FBi)'),h('pre',{},JSON.stringify(ep.fbi_json,null,1))));
+  syncPlayer();
+}
+function play(ep,t){if(player.ep?.slug!==ep.slug){player.ep=ep;player.rows=ep.rows.filter(r=>r.t!==null);audio.src=ep.audio_url;document.body.classList.add('has-player');playerEl.hidden=false;}
+  const go=()=>{audio.currentTime=t;audio.play();};if(audio.readyState>=1)go();else{audio.addEventListener('loadedmetadata',go,{once:true});audio.load();}syncPlayer();}
+function closePlayer(){audio.pause();audio.removeAttribute('src');audio.load();player.ep=null;playerEl.hidden=true;document.body.classList.remove('has-player');}
+closeBtn.onclick=closePlayer;
+function syncPlayer(){if(!player.ep)return;const onOwn=location.hash===`#/ep/${player.ep.slug}`;closeBtn.hidden=onOwn;
+  let cur=null;for(const r of player.rows)if(r.t<=audio.currentTime)cur=r;
+  if(onOwn)document.querySelectorAll('tr[data-t]').forEach(tr=>tr.classList.toggle('playing',cur&&+tr.dataset.t===cur.t));
+  nowEl.replaceChildren(h('span',{},cur?h('span',{class:'now-artist'},cur.artist):h('span',{class:'now-artist'},player.ep.title),' ',h('span',{class:'now-title'},cur?cur.title||'':player.ep.hosts),onOwn?null:[' · ',h('a',{href:`#/ep/${player.ep.slug}`},player.ep.title+' ›')]));}
+audio.addEventListener('timeupdate',syncPlayer);
+function nav(hash){location.hash=hash;}
+function route(){const hsh=location.hash||'#/';let m;
+  if((m=/^#\/ep\/([\w-]+)$/.exec(hsh)))viewEp(m[1]);else if((m=/^#\/day\/(\d{4}-\d{2}-\d{2})$/.exec(hsh)))viewDay(m[1]);else if((m=/^#\/(\d{4}-\d{2})$/.exec(hsh)))viewCalendar(m[1]);else viewCalendar();
+  window.scrollTo(0,0);}
+window.addEventListener('hashchange',route);route();
+</script></body></html>
