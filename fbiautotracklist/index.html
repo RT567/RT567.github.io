@@ -30,7 +30,7 @@ button.nav[disabled]{opacity:.35;cursor:not-allowed}button.nav[disabled]:hover{b
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.wd{font-size:11px;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
 .day{min-height:48px;border:1px solid var(--line);border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:2px;color:var(--muted)}.day.empty{border-color:transparent}.day .n{font-weight:600}
 a.day.has{color:var(--fg);text-decoration:none;border-color:var(--acc);background:rgba(228,68,42,.06)}a.day.has:hover{background:rgba(228,68,42,.16)}
-.bg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.2}
+.bg{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.3}
 .wrap,.player,footer{position:relative;z-index:1}.player,footer{position:fixed}
 @media(prefers-reduced-motion:reduce){.bg{display:none}}
 .player{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(0,0,0,.12);padding:6px 20px 8px;z-index:10}
@@ -126,14 +126,21 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){try{
   const THREE=await import('three');const{FontLoader}=await import('three/addons/loaders/FontLoader.js');const{TextGeometry}=await import('three/addons/geometries/TextGeometry.js');const{RoomEnvironment}=await import('three/addons/environments/RoomEnvironment.js');
   const canvas=document.getElementById('bg'),renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,1,0.1,100);cam.position.z=30;
-  const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(new RoomEnvironment(),0.04).texture;pmrem.dispose();
+  // 90s chrome: a colourful equirectangular gradient as the reflection environment
+  const ec=document.createElement('canvas');ec.width=1024;ec.height=512;const g=ec.getContext('2d');
+  const grad=g.createLinearGradient(0,0,0,512);[[0,'#1b1464'],[0.18,'#2a7fff'],[0.34,'#9ff0ff'],[0.44,'#ffffff'],[0.5,'#ff3cac'],[0.56,'#ff8a00'],[0.68,'#ffe259'],[0.8,'#2bd47d'],[1,'#12002e']].forEach(([o,c])=>grad.addColorStop(o,c));
+  g.fillStyle=grad;g.fillRect(0,0,1024,512);
+  for(let i=0;i<14;i++){const x=Math.random()*1024,w=6+Math.random()*40;const sg=g.createLinearGradient(x,0,x+w,0);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(0.5,'rgba(255,255,255,0.95)');sg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=sg;g.fillRect(x,0,w,512);}
+  const envTex=new THREE.CanvasTexture(ec);envTex.mapping=THREE.EquirectangularReflectionMapping;envTex.colorSpace=THREE.SRGBColorSpace;
+  const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromEquirectangular(envTex).texture;pmrem.dispose();
   const dark=matchMedia('(prefers-color-scheme: dark)').matches;
   scene.add(new THREE.AmbientLight(0xffffff,dark?0.5:0.9));const key=new THREE.DirectionalLight(0xffffff,dark?2.2:1.6);key.position.set(-3,4,6);scene.add(key);const rim=new THREE.DirectionalLight(0xe4442a,1.2);rim.position.set(4,-2,-3);scene.add(rim);
   const font=await new FontLoader().loadAsync('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/fonts/helvetiker_bold.typeface.json');
   const geo=new TextGeometry('FBi',{font,size:6,height:3.2,curveSegments:6,bevelEnabled:true,bevelThickness:0.25,bevelSize:0.18,bevelSegments:2});
-  geo.center();const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:0.12,envMapIntensity:dark?1.3:1.0}));scene.add(mesh);
+  geo.center();const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:0.05,envMapIntensity:1.4}));scene.add(mesh);
   geo.computeBoundingBox();const bb=geo.boundingBox;const corners=[];for(const x of[bb.min.x,bb.max.x])for(const y of[bb.min.y,bb.max.y])for(const z of[bb.min.z,bb.max.z])corners.push(new THREE.Vector3(x,y,z));
-  let vw=1,vh=1;function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();
+  let vw=1,vh=1,lastInset=-1;function inset(){const f=document.querySelector('footer'),p=document.getElementById('player');return (f?f.offsetHeight:0)+(p&&!p.hidden?p.offsetHeight:0);}
+  function resize(){const w=innerWidth,h=Math.max(200,innerHeight-inset());lastInset=inset();canvas.style.height=h+'px';renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();
     vh=2*Math.tan(cam.fov*Math.PI/360)*cam.position.z;vw=vh*cam.aspect;const target=Math.min(vw*0.42,vh*0.5);mesh.scale.setScalar(target/(bb.max.x-bb.min.x));}
   addEventListener('resize',resize);resize();
   const pos=new THREE.Vector3(-vw*0.2,vh*0.15,0),vel=new THREE.Vector3(0.028,0.021,0.012);let last=performance.now();
@@ -142,7 +149,7 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){try{
   function screenBox(){mesh.updateMatrixWorld();let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
     for(const c of corners){v.copy(c).applyMatrix4(mesh.matrixWorld).project(cam);minX=Math.min(minX,v.x);maxX=Math.max(maxX,v.x);minY=Math.min(minY,v.y);maxY=Math.max(maxY,v.y);}
     return{minX,maxX,minY,maxY};}
-  function tick(now){const dt=Math.min(50,now-last)/16;last=now;
+  function tick(now){const dt=Math.min(50,now-last)/16;last=now;if(inset()!==lastInset)resize();
     pos.addScaledVector(vel,dt);if(pos.z<-8){pos.z=-8;vel.z=Math.abs(vel.z);}if(pos.z>6){pos.z=6;vel.z=-Math.abs(vel.z);}
     mesh.position.copy(pos);mesh.rotation.x+=spin.x*dt;mesh.rotation.y+=spin.y*dt;mesh.rotation.z+=spin.z*dt;
     // bounce on the projected bounding box: NDC runs -1..1, so 1 NDC unit = half the visible width/height at this depth
