@@ -101,10 +101,6 @@ async function viewEp(slug){let ep;try{ep=await loadEp(slug);}catch(e){app.repla
   const ev=ep.eval;
   app.replaceChildren(crumbs(h('a',{class:'btn',href:`#/day/${ep.date}`},'‹ '+ep.dayShort)),
     h('h1',{},ep.title,' ',h('small',{},ep.date,ep.hosts?' · '+ep.hosts:'')),
-    h('p',{class:'muted'},'Tracklist made automatically from the recording · ',h('a',{href:ep.fbi_url,target:'_blank',rel:'noopener'},'listen on fbi.radio ↗'),ev?' · this show also has an official tracklist, used here to check our accuracy':' · this show has no official tracklist'),
-    h('div',{class:'stats'},h('span',{},`${ep.rows.length} tracks`),h('span',{},`${ep.counts.high} high confidence`),h('span',{},`${ep.counts.mid} mid`),h('span',{},`${ep.counts.low} low`)),
-    ev?h('div',{class:'stats'},h('span',{},h('b',{},'Checked against the official tracklist:')),h('span',{},`found ${Math.round(ev.recall*100)}% of its tracks`),h('span',{},`${Math.round(ev.precision*100)}% of ours are on it`),ev.timestamp_in_track!=null?h('span',{},`${Math.round(ev.timestamp_in_track*100)}% of times land in the right track`):null):null,
-    ep.audio_url?h('p',{class:'note'},'Click a time to jump to that part of the show. The player stays at the bottom of the screen.'):null,
     h('table',{},h('thead',{},h('tr',{},h('th',{},'time'),h('th',{},'track'),h('th',{},'confidence'))),h('tbody',{},...rows)));
   if(ep.audio_url)loadPlayer(ep);else syncPlayer();
 }
