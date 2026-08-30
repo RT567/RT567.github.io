@@ -1,0 +1,351 @@
+[
+ {
+  "t": 58,
+  "artist": "Joseph Shabason",
+  "title": "I Thought That I Could Get Away with It",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Anne",
+   "label": "Western Vinyl",
+   "released": "2018",
+   "isrc": "US78L1818201",
+   "n_probes": 5
+  }
+ },
+ {
+  "t": 526,
+  "artist": "Eddie Suzuki & New Hawaii",
+  "title": "Beauty Near Hanalei",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "High Tide",
+   "label": "Aloha Got Soul",
+   "released": "2021",
+   "isrc": "QZC752100026",
+   "n_probes": 3
+  }
+ },
+ {
+  "t": 755,
+  "artist": "Donovan",
+  "title": "Clara Clairvoyant",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Open Road",
+   "label": "Donovan Discs LTD",
+   "released": "1970",
+   "isrc": "IEACI0900032",
+   "n_probes": 3
+  }
+ },
+ {
+  "t": 926,
+  "artist": "The Byrds",
+  "title": "Everybody's Been Burned",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "The Byrds",
+   "label": "Legacy/Columbia",
+   "released": "1967",
+   "isrc": "USSM10021223",
+   "n_probes": 3
+  }
+ },
+ {
+  "t": 1104,
+  "artist": "Felt",
+  "title": "Primitive Painters",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Ignite the Seven Cannons / The Strange Idols Pattern and Other Short Stories",
+   "label": "Cherry Red Records",
+   "released": "1984",
+   "isrc": "GBBLY1601493",
+   "n_probes": 6
+  }
+ },
+ {
+  "t": 1422,
+  "artist": "Bark Psychosis",
+  "title": "Three Girl Rumba",
+  "source": "asr",
+  "confidence": "medium",
+  "evidence": "it's Bach Psychosis, a group that, yeah, post-rock group from London ... The album Game Over from 1997 and the track Three Girl Rumba"
+ },
+ {
+  "t": 1734,
+  "artist": "Steve Hillage",
+  "title": "Alone",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "For to Next",
+   "label": "Virgin Catalogue",
+   "released": "1983",
+   "isrc": "GBAAA0600699",
+   "n_probes": 5
+  }
+ },
+ {
+  "t": 2045,
+  "artist": "Cyndi Lauper",
+  "title": "All Through the Night",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "She's So Unusual",
+   "label": "Portrait",
+   "released": "1983",
+   "isrc": "USSM18300652",
+   "n_probes": 4
+  }
+ },
+ {
+  "t": 2305,
+  "artist": "The The",
+  "title": "Giant",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Soul Mining",
+   "label": "Epic",
+   "released": "1983",
+   "isrc": "GBBBM0102231",
+   "n_probes": 8
+  }
+ },
+ {
+  "t": 2866,
+  "artist": "Georgie Red",
+  "title": "Help the Man (Save Ya Mix)",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": null,
+   "label": null,
+   "released": null,
+   "isrc": null,
+   "n_probes": 7
+  }
+ },
+ {
+  "t": 3307,
+  "artist": "Patrice Rushen",
+  "title": "Don't Blame Me (Remastered)",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Posh (Remastered)",
+   "label": "Strut",
+   "released": "1980",
+   "isrc": "DEG931912528",
+   "n_probes": 6
+  }
+ },
+ {
+  "t": 3686,
+  "artist": "Jean Michel Jean Louis",
+  "title": "Dju",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Jean Michel Jean Louis",
+   "label": "Je Production",
+   "released": "2013",
+   "isrc": "FR6V81730675",
+   "n_probes": 5
+  }
+ },
+ {
+  "t": 3998,
+  "artist": "Piano Fantasia",
+  "title": "Song for Denise",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Best of Collector: Piano Fantasia (Le meilleur des ann\u00e9es 80)",
+   "label": "Musiques & Solutions",
+   "released": "2012",
+   "isrc": "FR57F8500690",
+   "n_probes": 6
+  }
+ },
+ {
+  "t": 4406,
+  "artist": "Tina Turner",
+  "title": "We Don't Need Another Hero (Thunderdome) [Extended Version]",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Mad Max Beyond Thunderdome (Original Motion Picture Soundtrack)",
+   "label": "Capitol Records",
+   "released": "1985",
+   "isrc": "USCA29400741",
+   "n_probes": 5
+  }
+ },
+ {
+  "t": 4782,
+  "artist": "Michael Peters",
+  "title": "Let Me Show You How",
+  "source": "asr",
+  "confidence": "low",
+  "evidence": "i'm gonna play a track by michael peters now he um yeah just made this song as far as i know let me show you how um very special show wasn't ever really properly released"
+ },
+ {
+  "t": 4967,
+  "artist": "Shy One",
+  "title": "Live Dis Ting (Belt Drives)",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Mali",
+   "label": "Touching Bass",
+   "released": "2026",
+   "isrc": "DEG932506271",
+   "n_probes": 5
+  }
+ },
+ {
+  "t": 5442,
+  "artist": "Erotic Dissidents",
+  "title": "Move Your Ass (Long Version)",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "Naked Angel",
+   "label": "Techno Subway Dance",
+   "released": "1989",
+   "isrc": "US27M5926010",
+   "n_probes": 4
+  }
+ },
+ {
+  "t": 5714,
+  "artist": "Ben Liebrand",
+  "title": "Move to the Bigband (feat. Tony Scott) [Single Version]",
+  "source": "fingerprint",
+  "confidence": "low",
+  "announced_as": null,
+  "meta": {
+   "album": "Move to the Bigband (feat. Tony Scott)",
+   "label": "High Fashion Music",
+   "released": "1990",
+   "isrc": "NLP439000119",
+   "n_probes": 1
+  }
+ },
+ {
+  "t": 5842,
+  "artist": "Trey Risque Feat. Nikki",
+  "title": "A Night With The Boys (Trail Of Destruction Dub)",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": null,
+   "label": null,
+   "released": null,
+   "isrc": null,
+   "n_probes": 3
+  }
+ },
+ {
+  "t": 6042,
+  "artist": "Sexy Sushi",
+  "title": "Sex Appeal",
+  "source": "fingerprint",
+  "confidence": "low",
+  "announced_as": null,
+  "meta": {
+   "album": null,
+   "label": null,
+   "released": null,
+   "isrc": null,
+   "n_probes": 1
+  }
+ },
+ {
+  "t": 6282,
+  "artist": "Louis CL",
+  "title": "Sick",
+  "source": "asr",
+  "confidence": "low",
+  "evidence": "before that Louis CL with Sick",
+  "note": "fingerprint suggested Elio Riso & Lucio Spain - Breaking Minds (single probe)"
+ },
+ {
+  "t": 6342,
+  "artist": "Hot'n'Juicy & Mousse T.",
+  "title": "Horny ('98 Radio Edit)",
+  "source": "fingerprint",
+  "confidence": "medium",
+  "announced_as": null,
+  "meta": {
+   "album": "Horny (Radio Edit's) - Single",
+   "label": "Peppermint Jam Records",
+   "released": "1998",
+   "isrc": "DEP081900009",
+   "n_probes": 2
+  }
+ },
+ {
+  "t": 6644,
+  "artist": "Shadow Child",
+  "title": "Song For Sophia",
+  "source": "both",
+  "confidence": "high",
+  "announced_as": null,
+  "meta": {
+   "album": "DNA - EP",
+   "label": "LDN Records",
+   "released": "2026",
+   "isrc": "GBAAP2600165",
+   "n_probes": 4
+  }
+ },
+ {
+  "t": 6924,
+  "artist": "Diplo & SIDEPIECE",
+  "title": "On My Mind",
+  "source": "fingerprint",
+  "confidence": "low",
+  "announced_as": null,
+  "meta": {
+   "album": "Diplo",
+   "label": "FFRR",
+   "released": "2019",
+   "isrc": "USZ4V1900134",
+   "n_probes": 1
+  }
+ },
+ {
+  "t": 7018,
+  "artist": "Jack Wickham",
+  "title": "Cotone",
+  "source": "asr",
+  "confidence": "low",
+  "evidence": "This is Jack Wickham, a track from, I think it was 2017 maybe, Cotone",
+  "note": "fingerprint suggested Tanya Louise - Deep in You (Rob's Vibey Dub) (single probe)"
+ }
+]
