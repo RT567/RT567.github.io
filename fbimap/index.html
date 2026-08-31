@@ -7,6 +7,9 @@ header{position:fixed;top:0;left:0;right:0;padding:14px 20px;z-index:5;pointer-e
 h1{font-size:26px;margin:0;letter-spacing:-.02em}h1 .brand{color:var(--acc)}h1 .thin{font-weight:300}
 .sub{color:var(--muted);font-size:13px;margin-top:2px}
 header a{pointer-events:auto;color:var(--acc)}
+#search{pointer-events:auto;margin-top:10px;font:inherit;font-size:14px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:18px;padding:6px 14px;color:var(--fg);width:220px;outline:none}
+#search:focus{border-color:var(--acc)}
+.node.searchhit circle{stroke:var(--acc);stroke-width:3}
 svg{display:block;width:100vw;height:100vh;cursor:grab}svg:active{cursor:grabbing}
 .node circle{stroke:rgba(0,0,0,.5);stroke-width:1;cursor:pointer}
 .node.generated circle{stroke:var(--acc);stroke-dasharray:3 2;stroke-width:1.5}
@@ -24,7 +27,8 @@ footer{position:fixed;bottom:0;left:0;right:0;text-align:center;color:var(--mute
 footer a{pointer-events:auto;color:var(--muted)}
 </style></head><body>
 <header><h1><span class="brand">FBi</span> Radio <span class="thin">program map</span></h1>
-<div class="sub">Shows that play the same artists sit close together · past year of tracklists · click a show · <a href="../fbiautotracklist/">tracklists →</a></div></header>
+<div class="sub">Shows that play the same artists sit close together · past year of tracklists · click a show · <a href="../fbiautotracklist/">tracklists →</a></div>
+<input id="search" type="search" placeholder="search shows…" autocomplete="off"></header>
 <svg id="svg"></svg>
 <div id="panel"><button id="close">×</button><div id="panel-body"></div></div>
 <div id="tip"></div>
@@ -86,5 +90,11 @@ node.on('click',(e,n)=>{e.stopPropagation();
    return `<div class="nb"><b>${o.name}</b> <span class="muted">${Math.round(l.w*100)}% similar</span><div class="shared">shared: ${l.shared.join(', ')}${l.tracks&&l.tracks.length?`<br>both played: ${l.tracks.join(' · ')}`:''}${l.genres&&l.genres.length?`<br>genres: ${l.genres.join(', ')}`:''}</div></div>`;}).join('');
  panel.classList.add('open');});
 svg.on('click',()=>{panel.classList.remove('open');clearSel();});
+const searchBox=document.getElementById('search');
+searchBox.addEventListener('input',()=>{const q=searchBox.value.trim().toLowerCase();
+  if(!q){node.classed('dim',false).classed('searchhit',false);link.classed('dim',false);return;}
+  node.classed('searchhit',n=>n.name.toLowerCase().includes(q))
+      .classed('dim',n=>!n.name.toLowerCase().includes(q));
+  link.classed('dim',true);});
 });
 </script></body></html>
