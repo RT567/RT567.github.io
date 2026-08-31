@@ -10,7 +10,7 @@ header a{pointer-events:auto;color:var(--acc)}
 svg{display:block;width:100vw;height:100vh;cursor:grab}svg:active{cursor:grabbing}
 .node circle{stroke:rgba(0,0,0,.5);stroke-width:1;cursor:pointer}
 .node.generated circle{stroke:var(--acc);stroke-dasharray:3 2;stroke-width:1.5}
-.node text{fill:var(--fg);font-size:11px;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:3px}
+.node text{fill:var(--fg);pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:rgba(0,0,0,.55);stroke-width:2.5px}
 line{stroke:#777;stroke-opacity:.25}
 .dim{opacity:.12}
 #panel{position:fixed;right:0;top:0;bottom:0;width:340px;max-width:92vw;background:rgba(20,20,20,.96);border-left:1px solid var(--line);padding:18px;overflow-y:auto;z-index:6;transform:translateX(100%);transition:transform .2s}
@@ -35,13 +35,26 @@ fetch('data.json').then(r=>r.json()).then(data=>{
 const W=innerWidth,H=innerHeight;
 const svg=d3.select('#svg').attr('viewBox',[0,0,W,H]);
 const g=svg.append('g');
-svg.call(d3.zoom().scaleExtent([0.3,4]).on('zoom',e=>g.attr('transform',e.transform)));
+let zoomK=1;
+svg.call(d3.zoom().scaleExtent([0.3,8]).on('zoom',e=>{g.attr('transform',e.transform);if(Math.abs(e.transform.k-zoomK)>0.01){zoomK=e.transform.k;updateLabels();}}));
 const color=d3.scaleOrdinal(d3.quantize(t=>d3.interpolateRainbow(t*0.9+0.02),Math.max(10,new Set(data.nodes.map(n=>n.community)).size)));
 const r=d3.scaleSqrt().domain([0,d3.max(data.nodes,n=>n.tracks)]).range([6,42]);
 const link=g.append('g').selectAll('line').data(data.links).join('line').attr('stroke-width',l=>1+l.w*7);
 const node=g.append('g').selectAll('g').data(data.nodes).join('g').attr('class',n=>'node'+(n.generated?' generated':''));
 node.append('circle').attr('r',n=>r(n.tracks)).attr('fill',n=>color(n.community));
-node.filter(n=>r(n.tracks)>13).append('text').attr('dy',n=>-r(n.tracks)-4).text(n=>n.name);
+const label=node.append('text').attr('dy','.35em').text(n=>n.name);
+label.each(function(n){n._w12=this.getComputedTextLength();});   // width at the default font size
+function updateLabels(){
+  // Each label: at most 13px apparent (zoomed in it stays 13px on screen → shrinks vs bubbles),
+  // scaled down to fit inside its bubble, capped in graph units when zoomed out (so far out the
+  // text shrinks away with the view), hidden below 8px apparent.
+  const graphFs=Math.min(13/zoomK,16);
+  label.each(function(n){
+    const fitFs=(r(n.tracks)*1.9/n._w12)*13;         // the size at which the label fits its bubble
+    const fs=Math.max(9,Math.min(graphFs,fitFs));    // shrink toward fitting, but stay readable — overflow a little instead
+    const apparent=fs*zoomK;
+    d3.select(this).attr('font-size',fs).style('display',apparent>=8?null:'none');});}
+updateLabels();
 const sim=d3.forceSimulation(data.nodes)
  .force('link',d3.forceLink(data.links).id(n=>n.id).distance(l=>140-l.w*120).strength(l=>Math.min(1,l.w*2.2)))
  .force('charge',d3.forceManyBody().strength(-220))
