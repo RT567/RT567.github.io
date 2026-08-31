@@ -22,7 +22,7 @@ button.seek:hover{border-color:var(--acc);color:var(--acc)}
 .high{color:var(--high);border-color:var(--high)}.mid{color:var(--med);border-color:var(--med)}.low{color:var(--low);border-color:var(--low)}
 .official{color:var(--high);border-color:var(--high)}
 .badge.generated{border:1px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(100deg,#1f4fd8,#19c3d6,#7a2bd6,#e6198f,#ff5a1f,#f2b705,#12a86b) border-box}
-.badge.generated .gtext{background:linear-gradient(100deg,#1f4fd8,#19c3d6,#7a2bd6,#e6198f,#ff5a1f,#f2b705,#12a86b);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.gradtext,.badge.generated .gtext{background:linear-gradient(100deg,#1f4fd8,#19c3d6,#7a2bd6,#e6198f,#ff5a1f,#f2b705,#12a86b);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
 .artist{font-weight:600}.title{color:var(--muted)}tr.playing td{background:rgba(228,68,42,.08)}tr.playing button.seek{border-color:var(--acc);color:var(--acc)}
 .links{display:flex;gap:6px;margin-top:4px}.links a.icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:24px;border:1px solid var(--line);border-radius:6px}
 .links a.icon.bandcamp{color:#1da0c3}.links a.icon.youtube{color:#ff0000}.links a.icon.soundcloud{color:#ff5500}.links a.icon.spotify{color:#1db954}.links a.icon.apple{color:#fa243c}.links a.icon.deezer{color:#a238ff}.links a.icon.shazam{color:#0088ff}.links a.icon.discogs{color:#eee}.links a.icon.link{color:var(--acc)}
@@ -76,7 +76,7 @@ async function viewCalendar(ym){const eps=await loadIndex(),days=byDay(eps);
   for(let d=1;d<=n;d++){const k=`${y}-${pad(m+1)}-${pad(d)}`;grid.append(days[k]?h('a',{class:'day has',href:`#/day/${k}`},h('span',{class:'n'},d)):h('div',{class:'day'},h('span',{class:'n'},d)));}
   app.replaceChildren(
     h('h1',{class:'home'},h('span',{class:'brand'},'FBi'),' Radio ',h('span',{class:'thin'},'auto tracklists')),
-    h('p',{class:'muted home-sub'},'Computer generated tracklists'),
+    h('p',{class:'muted home-sub'},h('span',{class:'gradtext'},'Generating'),' automatic tracklists for FBi recordings that were uploaded without a tracklist'),
     h('div',{class:'month'},h('div',{class:'monthnav'},
       h('button',{class:'nav',disabled:atMin,title:atMin?"Sorry — nothing before August 2026, that's as far back as this goes":null,onclick:()=>{if(!atMin)nav(m===0?`#/${y-1}-12`:`#/${y}-${pad(m)}`)}},'‹'),
       h('h2',{},`${NAMES[m]} ${y}`),
