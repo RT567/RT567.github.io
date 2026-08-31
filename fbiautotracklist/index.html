@@ -37,8 +37,8 @@ body.has-player footer{bottom:74px;border-top:0;background:transparent}.note{fon
 button.nav{font:inherit;font-size:22px;line-height:1;background:none;border:1px solid var(--line);border-radius:6px;color:var(--fg);padding:4px 14px;cursor:pointer}button.nav:hover{border-color:var(--acc);color:var(--acc)}
 button.nav[disabled]{opacity:.35;cursor:not-allowed}button.nav[disabled]:hover{border-color:var(--line);color:var(--fg)}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.wd{font-size:11px;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
-.day{min-height:48px;border:1px solid var(--line);border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:2px;color:var(--muted)}.day.empty{border-color:transparent}.day .n{font-weight:600}
-a.day.has{color:var(--fg);text-decoration:none;border-color:var(--acc);background:rgba(228,68,42,.06)}a.day.has:hover{background:rgba(228,68,42,.16)}
+.day{min-height:48px;border:1px solid var(--line);border-radius:6px;padding:6px;display:flex;flex-direction:column;gap:2px;color:var(--muted);opacity:.35}.day.empty{border-color:transparent;opacity:0}.day .n{font-weight:600}
+a.day.has{color:var(--fg);text-decoration:none;opacity:1}a.day.has:hover{border-color:var(--acc);color:var(--acc)}
 .bg{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.3}
 .wrap,.player,footer{position:relative;z-index:1}.player,footer{position:fixed}
 @media(prefers-reduced-motion:reduce){.bg{display:none}}
