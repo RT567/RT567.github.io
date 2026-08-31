@@ -57,12 +57,13 @@ function updateLabels(){
 updateLabels();
 const sim=d3.forceSimulation(data.nodes)
  .force('link',d3.forceLink(data.links).id(n=>n.id).distance(l=>140-l.w*120).strength(l=>Math.min(1,l.w*2.2)))
- .force('charge',d3.forceManyBody().strength(-90))
- .force('x',d3.forceX(n=>80+n.mx*(W-160)).strength(0.35))
- .force('y',d3.forceY(n=>90+n.my*(H-170)).strength(0.35))
+ .force('charge',d3.forceManyBody().strength(-220))
+ .force('center',d3.forceCenter(W/2,H/2))
  .force('collide',d3.forceCollide(n=>r(n.tracks)+6))
  .on('tick',()=>{link.attr('x1',l=>l.source.x).attr('y1',l=>l.source.y).attr('x2',l=>l.target.x).attr('y2',l=>l.target.y);
    node.attr('transform',n=>`translate(${n.x},${n.y})`);});
+node.call(d3.drag().on('start',(e,n)=>{if(!e.active)sim.alphaTarget(.25).restart();n.fx=n.x;n.fy=n.y;})
+ .on('drag',(e,n)=>{n.fx=e.x;n.fy=e.y;}).on('end',(e,n)=>{if(!e.active)sim.alphaTarget(0);n.fx=n.fy=null;}));
 const tip=document.getElementById('tip');
 node.on('mousemove',(e,n)=>{tip.style.opacity=1;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+10)+'px';
  tip.innerHTML=`<b>${n.name}</b><br>${n.tracks} tracks · ${n.episodes} episodes${n.generated?'<br>tracklists generated automatically':''}<br><span style="color:#bbb">${n.top.join(', ')}</span>${n.genres&&n.genres.length?`<br><span style="color:#8a8">${n.genres.join(' · ')}</span>`:''}`;})
@@ -77,7 +78,7 @@ node.on('click',(e,n)=>{e.stopPropagation();
  body.innerHTML=`<h2>${n.name}</h2><div class="muted">${n.tracks} tracks · ${n.episodes} episodes in the window${n.generated?' · tracklists generated automatically':''}</div>
   <div class="muted" style="margin:6px 0 10px">Plays a lot of: ${n.top.join(', ')}</div>`+
   nbs.map(l=>{const o=l.source.id===n.id?l.target:l.source;
-   return `<div class="nb"><b>${o.name}</b> <span class="muted">${Math.round(l.w*100)}% similar</span><div class="shared">shared: ${l.shared.join(', ')}${l.genres&&l.genres.length?`<br>genres: ${l.genres.join(', ')}`:''}</div></div>`;}).join('');
+   return `<div class="nb"><b>${o.name}</b> <span class="muted">${Math.round(l.w*100)}% similar</span><div class="shared">shared: ${l.shared.join(', ')}${l.tracks&&l.tracks.length?`<br>both played: ${l.tracks.join(' · ')}`:''}${l.genres&&l.genres.length?`<br>genres: ${l.genres.join(', ')}`:''}</div></div>`;}).join('');
  panel.classList.add('open');});
 svg.on('click',()=>{panel.classList.remove('open');clearSel();});
 });
