@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FBi program map</title>
+<style>
+:root{color-scheme:dark;--bg:#141414;--fg:#ececec;--muted:#9a9a9a;--line:#2c2c2c;--acc:#e4442a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow:hidden}
+header{position:fixed;top:0;left:0;right:0;padding:14px 20px;z-index:5;pointer-events:none}
+h1{font-size:26px;margin:0;letter-spacing:-.02em}h1 .brand{color:var(--acc)}h1 .thin{font-weight:300}
+.sub{color:var(--muted);font-size:13px;margin-top:2px}
+header a{pointer-events:auto;color:var(--acc)}
+svg{display:block;width:100vw;height:100vh;cursor:grab}svg:active{cursor:grabbing}
+.node circle{stroke:rgba(0,0,0,.5);stroke-width:1;cursor:pointer}
+.node.generated circle{stroke:var(--acc);stroke-dasharray:3 2;stroke-width:1.5}
+.node text{fill:var(--fg);font-size:11px;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:3px}
+line{stroke:#777;stroke-opacity:.25}
+.dim{opacity:.12}
+#panel{position:fixed;right:0;top:0;bottom:0;width:340px;max-width:92vw;background:rgba(20,20,20,.96);border-left:1px solid var(--line);padding:18px;overflow-y:auto;z-index:6;transform:translateX(100%);transition:transform .2s}
+#panel.open{transform:none}
+#panel h2{margin:0 0 2px;font-size:20px}#panel .muted{color:var(--muted);font-size:13px}
+#panel .nb{padding:9px 0;border-bottom:1px solid var(--line)}#panel .nb b{font-size:14px}
+#panel .shared{color:var(--muted);font-size:12.5px}
+#panel button{position:absolute;top:10px;right:12px;font:inherit;font-size:18px;background:none;border:1px solid var(--line);border-radius:50%;width:30px;height:30px;color:var(--muted);cursor:pointer}
+#tip{position:fixed;pointer-events:none;background:#000;color:#fff;padding:7px 10px;border-radius:6px;font-size:12.5px;max-width:260px;z-index:7;opacity:0;transition:opacity .1s}
+footer{position:fixed;bottom:0;left:0;right:0;text-align:center;color:var(--muted);font-size:12.5px;padding:8px;pointer-events:none}
+footer a{pointer-events:auto;color:var(--muted)}
+</style></head><body>
+<header><h1><span class="brand">FBi</span> Radio <span class="thin">program map</span></h1>
+<div class="sub">Shows that play the same artists sit close together · past year of tracklists · click a show · <a href="../fbiautotracklist/">tracklists →</a></div></header>
+<svg id="svg"></svg>
+<div id="panel"><button id="close">×</button><div id="panel-body"></div></div>
+<div id="tip"></div>
+<footer>Bubble size = tracks played · colours = clusters of similar shows · dashed ring = tracklist generated automatically · <a href="../fbiautotracklist/">FBi auto tracklists</a> · by Rob T</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+fetch('data.json').then(r=>r.json()).then(data=>{
+const W=innerWidth,H=innerHeight;
+const svg=d3.select('#svg').attr('viewBox',[0,0,W,H]);
+const g=svg.append('g');
+svg.call(d3.zoom().scaleExtent([0.3,4]).on('zoom',e=>g.attr('transform',e.transform)));
+const color=d3.scaleOrdinal(d3.quantize(t=>d3.interpolateRainbow(t*0.9+0.02),Math.max(10,new Set(data.nodes.map(n=>n.community)).size)));
+const r=d3.scaleSqrt().domain([0,d3.max(data.nodes,n=>n.tracks)]).range([6,42]);
+const link=g.append('g').selectAll('line').data(data.links).join('line').attr('stroke-width',l=>1+l.w*7);
+const node=g.append('g').selectAll('g').data(data.nodes).join('g').attr('class',n=>'node'+(n.generated?' generated':''));
+node.append('circle').attr('r',n=>r(n.tracks)).attr('fill',n=>color(n.community));
+node.filter(n=>r(n.tracks)>13).append('text').attr('dy',n=>-r(n.tracks)-4).text(n=>n.name);
+const sim=d3.forceSimulation(data.nodes)
+ .force('link',d3.forceLink(data.links).id(n=>n.id).distance(l=>140-l.w*120).strength(l=>Math.min(1,l.w*2.2)))
+ .force('charge',d3.forceManyBody().strength(-220))
+ .force('center',d3.forceCenter(W/2,H/2))
+ .force('collide',d3.forceCollide(n=>r(n.tracks)+6))
+ .on('tick',()=>{link.attr('x1',l=>l.source.x).attr('y1',l=>l.source.y).attr('x2',l=>l.target.x).attr('y2',l=>l.target.y);
+   node.attr('transform',n=>`translate(${n.x},${n.y})`);});
+node.call(d3.drag().on('start',(e,n)=>{if(!e.active)sim.alphaTarget(.25).restart();n.fx=n.x;n.fy=n.y;})
+ .on('drag',(e,n)=>{n.fx=e.x;n.fy=e.y;}).on('end',(e,n)=>{if(!e.active)sim.alphaTarget(0);n.fx=n.fy=null;}));
+const tip=document.getElementById('tip');
+node.on('mousemove',(e,n)=>{tip.style.opacity=1;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+10)+'px';
+ tip.innerHTML=`<b>${n.name}</b><br>${n.tracks} tracks · ${n.episodes} episodes${n.generated?'<br>tracklists generated automatically':''}<br><span style="color:#bbb">${n.top.join(', ')}</span>`;})
+ .on('mouseleave',()=>tip.style.opacity=0);
+const panel=document.getElementById('panel'),body=document.getElementById('panel-body');
+document.getElementById('close').onclick=()=>{panel.classList.remove('open');clearSel();};
+function clearSel(){node.classed('dim',false);link.classed('dim',false);}
+node.on('click',(e,n)=>{e.stopPropagation();
+ const nbs=data.links.filter(l=>l.source.id===n.id||l.target.id===n.id).sort((a,b)=>b.w-a.w);
+ const ids=new Set([n.id,...nbs.map(l=>l.source.id===n.id?l.target.id:l.source.id)]);
+ node.classed('dim',m=>!ids.has(m.id));link.classed('dim',l=>l.source.id!==n.id&&l.target.id!==n.id);
+ body.innerHTML=`<h2>${n.name}</h2><div class="muted">${n.tracks} tracks · ${n.episodes} episodes in the window${n.generated?' · tracklists generated automatically':''}</div>
+  <div class="muted" style="margin:6px 0 10px">Plays a lot of: ${n.top.join(', ')}</div>`+
+  nbs.map(l=>{const o=l.source.id===n.id?l.target:l.source;
+   return `<div class="nb"><b>${o.name}</b> <span class="muted">${Math.round(l.w*100)}% similar</span><div class="shared">shared: ${l.shared.join(', ')}</div></div>`;}).join('');
+ panel.classList.add('open');});
+svg.on('click',()=>{panel.classList.remove('open');clearSel();});
+});
+</script></body></html>
