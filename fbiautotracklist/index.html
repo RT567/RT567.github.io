@@ -76,7 +76,7 @@ async function viewCalendar(ym){const eps=await loadIndex(),days=byDay(eps);
   for(let d=1;d<=n;d++){const k=`${y}-${pad(m+1)}-${pad(d)}`;grid.append(days[k]?h('a',{class:'day has',href:`#/day/${k}`},h('span',{class:'n'},d)):h('div',{class:'day'},h('span',{class:'n'},d)));}
   app.replaceChildren(
     h('h1',{class:'home'},h('span',{class:'brand'},'FBi'),' Radio ',h('span',{class:'thin'},'auto tracklists')),
-    h('p',{class:'muted home-sub'},h('span',{class:'gradtext'},'Generating'),' automatic tracklists for FBi show recordings that were uploaded without a tracklist'),
+    h('p',{class:'muted home-sub'},h('span',{class:'gradtext'},'Generating'),' automatic tracklists for FBi show recordings that were uploaded without one'),
     h('div',{class:'month'},h('div',{class:'monthnav'},
       h('button',{class:'nav',disabled:atMin,title:atMin?"Sorry — nothing before August 2026, that's as far back as this goes":null,onclick:()=>{if(!atMin)nav(m===0?`#/${y-1}-12`:`#/${y}-${pad(m)}`)}},'‹'),
       h('h2',{},`${NAMES[m]} ${y}`),
