@@ -29,6 +29,7 @@ button.seek:hover{border-color:var(--acc);color:var(--acc)}
 .links{display:flex;gap:6px;margin-top:4px}.links a.icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:24px;border:1px solid var(--line);border-radius:6px}
 .links a.icon.bandcamp{color:#1da0c3}.links a.icon.youtube{color:#ff0000}.links a.icon.soundcloud{color:#ff5500}.links a.icon.spotify{color:#1db954}.links a.icon.apple{color:#fa243c}.links a.icon.deezer{color:#a238ff}.links a.icon.shazam{color:#0088ff}.links a.icon.discogs{color:#eee}.links a.icon.link{color:var(--acc)}
 .links a.icon.search{opacity:.45;filter:saturate(.7)}.links a.icon:hover{border-color:currentColor;opacity:1;filter:none}
+@media(hover:hover) and (pointer:fine){tr .links{opacity:0;transition:opacity .15s}tr:hover .links{opacity:1}}
 details{margin-top:28px}summary{cursor:pointer;font-weight:600}pre{background:rgba(127,127,127,.08);padding:12px;border-radius:6px;overflow-x:auto;font-size:12px;white-space:pre-wrap}
 .mb{margin:10px 0;padding:10px 12px;border-left:3px solid var(--line)}.mb .t{color:var(--muted)}
 .stats{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0;color:var(--muted);font-size:13px}
