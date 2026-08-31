@@ -55,6 +55,7 @@ function updateLabels(){
     const apparent=fs*zoomK;
     d3.select(this).attr('font-size',fs).style('display',apparent>=8?null:'none');});}
 updateLabels();
+data.nodes.forEach(n=>{if(n.mx!=null){n.x=80+n.mx*(W-160);n.y=90+n.my*(H-170);}});  // honest starting positions (MDS); forces relax from there
 const sim=d3.forceSimulation(data.nodes)
  .force('link',d3.forceLink(data.links).id(n=>n.id).distance(l=>140-l.w*120).strength(l=>Math.min(1,l.w*2.2)))
  .force('charge',d3.forceManyBody().strength(-220))
