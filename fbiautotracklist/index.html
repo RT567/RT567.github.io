@@ -149,7 +149,7 @@ audio.addEventListener('timeupdate',syncPlayer);
 function nav(hash){location.hash=hash;}
 function route(){const hsh=location.hash||'#/';let m;
   if((m=/^#\/ep\/([\w-]+)$/.exec(hsh)))viewEp(m[1]);else if((m=/^#\/day\/(\d{4}-\d{2}-\d{2})$/.exec(hsh)))viewDay(m[1]);else if((m=/^#\/(\d{4}-\d{2})$/.exec(hsh)))viewCalendar(m[1]);else viewCalendar();
-  window.scrollTo(0,0);syncPlayer();}
+  window.scrollTo(0,0);syncPlayer();document.querySelectorAll('.teach').forEach(el=>el.remove());}
 window.addEventListener('hashchange',route);route();
 </script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
