@@ -7,6 +7,9 @@ body{font:18px/1.8 sans-serif;max-width:600px;margin:60px auto;padding:0 20px}
 ol{list-style:none;margin:0;padding:0 0 0 16px;border-left:2px solid #000}
 li{padding-left:7.5em;text-indent:-7.5em}
 time{display:inline-block;width:7.5em;text-indent:0;font-family:monospace;color:#666}
+.r{margin-left:.6em;white-space:nowrap}
+.r i{font-style:normal;cursor:pointer;padding:0 1px}
+.r small{color:#666;margin-left:.3em}
 </style>
 <h1>stuff</h1>
 <ol>
@@ -26,3 +29,63 @@ time{display:inline-block;width:7.5em;text-indent:0;font-family:monospace;color:
 <li><time>2026-09-30</time><a href="/every-onion/">every-onion</a></li>
 <li><time>2026-09-30</time><a href="/reflection/">reflection</a></li>
 </ol>
+<script>
+// Star ratings. You can rate a site once you've opened it from this page. After rating you see
+// the average; hover (or tap) the stars to change your rating. Backend: ~/silly/ratings.
+(function () {
+  var API = "https://rt567-ratings.rt567.workers.dev";
+  function load(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+  function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  var visited = load("visited", {}), mine = load("mine", {}), avg = {};
+  var voter = load("voter", null);
+  if (!voter) {
+    voter = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36) + Math.random().toString(36).slice(2)).replace(/[^A-Za-z0-9]/g, "");
+    save("voter", voter);
+  }
+
+  var rows = [].map.call(document.querySelectorAll("ol a"), function (a) {
+    var r = { site: a.getAttribute("href").split("/")[1], el: document.createElement("span"), editing: false, hover: 0, msg: "" };
+    r.el.className = "r";
+    a.parentNode.appendChild(r.el);
+    function markVisited() { visited[r.site] = 1; save("visited", visited); render(r); }
+    a.addEventListener("click", markVisited);
+    a.addEventListener("auxclick", markVisited);
+    r.el.addEventListener("mouseenter", function () { if (mine[r.site]) { r.editing = true; render(r); } });
+    r.el.addEventListener("mouseleave", function () { r.editing = false; r.hover = 0; render(r); });
+    r.el.addEventListener("mouseover", function (e) { var n = +e.target.dataset.n; if (n && n !== r.hover) { r.hover = n; render(r); } });
+    r.el.addEventListener("click", function (e) {
+      var n = +e.target.dataset.n;
+      if (mine[r.site] && !r.editing) { r.editing = true; render(r); return; } // touch: first tap opens editing
+      if (n) rate(r, n);
+    });
+    return r;
+  });
+
+  function render(r) {
+    if (!visited[r.site]) { r.el.innerHTML = ""; return; }
+    var rated = mine[r.site], a = avg[r.site], showAvg = rated && !r.editing, filled, html = "";
+    filled = showAvg ? Math.round(a ? a.avg : rated) : (r.hover || rated || 0);
+    for (var i = 1; i <= 5; i++) html += '<i data-n="' + i + '">' + (i <= filled ? "★" : "☆") + "</i>";
+    if (r.msg) html += "<small>" + r.msg + "</small>";
+    else if (showAvg && a) html += "<small>" + a.avg.toFixed(1) + " (" + a.count + ")</small>";
+    else if (rated) html += "<small>yours: " + (r.hover || rated) + "</small>";
+    else html += "<small>rate it</small>";
+    r.el.innerHTML = html;
+  }
+
+  function rate(r, n) {
+    mine[r.site] = n; save("mine", mine);
+    r.editing = false; r.hover = 0; r.msg = ""; render(r);
+    fetch(API + "/rate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ site: r.site, stars: n, voter: voter }) })
+      .then(function (res) { return res.json().then(function (j) { if (!res.ok) throw j; return j; }); })
+      .then(function (j) { avg[r.site] = { avg: j.avg, count: j.count }; render(r); })
+      .catch(function () { r.msg = "not saved"; render(r); });
+  }
+
+  function renderAll() { rows.forEach(render); }
+  renderAll();
+  fetch(API + "/ratings").then(function (res) { return res.json(); }).then(function (j) { avg = j; renderAll(); }).catch(function () {});
+  window.addEventListener("pageshow", function () { visited = load("visited", {}); renderAll(); });
+})();
+</script>

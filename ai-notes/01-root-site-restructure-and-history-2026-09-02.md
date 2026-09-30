@@ -55,6 +55,10 @@ Consequences for anyone editing here:
 - magic-8-ball links to `/magic-8-ball/set/` (the rigging page), on Rob's request.
 - Title `rt567`, heading `stuff`, a few lines of inline CSS (18px sans, 600px max-width, left border as the
   timeline line, monospace grey dates with a hanging indent). Keep it very, very basic.
+- **Star ratings** (added 2026-09-30): an inline `<script>` at the bottom adds 1–5 stars after each link, but only
+  for sites the visitor has opened from this page; after rating they see the average, and hovering/tapping the stars
+  lets them change their vote. Backend is a Cloudflare Worker + D1 in `~/silly/ratings` (read its ai-notes). The
+  script keys ratings by the link's first path segment, so new `<li>`s get stars automatically.
 - When a new Pages site appears in the owner's account (`gh api repos/RT567/<repo>/pages`), append it at the bottom with today's date.
 
 ## Portfolio (`eportfolio/`)
