@@ -26,7 +26,7 @@ ai-notes/             <- these notes
 | 2026-08-30 → ongoing | A background job commits `fbiautotracklist: update YYYY-MM-DD HH:MM` every ~15–20 min. See "The auto-updater" below. |
 | 2026-08-31 | `fbimap/` added: "FBi program similarity map (past year of tracklists, artist overlap)"; later search box, genre lookups, guaranteed graph connectivity. |
 | 2026-09-02 | **Restructure.** Everything portfolio-related moved into `eportfolio/` (`git mv`, paths inside were all relative so nothing broke; note `Maven Image.png` has a space and needed its own `git mv`). Root `index.html` replaced by the link list. Portfolio banner changed to say "accurate as of 2024". Links added: websight, latina-map (made for jackson), curlysim, fbiautotracklist, fbimap, cake-cutter (made for reggie), landmarks, moongrader. Links removed: eportfolio (owner: "get rid of it on the landing page"), github-slideshow (a 2021 GitHub Learning Lab starter repo; deleting the repo itself needs `gh auth refresh -h github.com -s delete_repo` which hasn't been run). `moonboard` renamed to `moongrader` (repo rename + link). List sorted alphabetically. |
-| 2026-09-30 | Links added: snowpack, and four new silly sites (each its own repo + Pages): autism-test, every-onion, magic-8-ball (links to `/magic-8-ball/set/`, the rigging page, on Rob's request; the bare `/magic-8-ball/` is what recipients get), put-it-in-the-backpack. |
+| 2026-09-30 | Links added: snowpack, and four new silly sites (each its own repo + Pages): autism-test, every-onion, magic-8-ball (links to `/magic-8-ball/set/`, the rigging page, on Rob's request; the bare `/magic-8-ball/` is what recipients get), put-it-in-the-backpack. Later the same day: reflection (a pure black page). |
 
 ## The auto-updater (important)
 
