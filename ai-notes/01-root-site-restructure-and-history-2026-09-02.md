@@ -53,8 +53,8 @@ Consequences for anyone editing here:
   or the first commit of the folder for `fbiautotracklist/` and `fbimap/`. Ties on the same day go in release order.
 - Optional dedication after the link: ` (made for jackson)`, ` (made for reggie)`.
 - magic-8-ball links to `/magic-8-ball/set/` (the rigging page), on Rob's request.
-- Title `rt567`, heading `stuff`, a few lines of inline CSS (18px sans, 600px max-width, left border as the
-  timeline line, monospace grey dates with a hanging indent). Keep it very, very basic.
+- Title `rt567`, heading `stuff`, a few lines of inline CSS (18px sans / 14px on phones, 600px max-width,
+  small monospace grey dates with a hanging indent, no timeline line). Keep it very, very basic.
 - **Star ratings** (added 2026-09-30): an inline `<script>` at the bottom adds 1–5 stars after each link, but only
   for sites the visitor has opened from this page; after rating they see the average, and hovering/tapping the stars
   lets them change their vote. Backend is a Cloudflare Worker + D1 in `~/silly/ratings` (read its ai-notes). The
