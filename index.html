@@ -75,11 +75,12 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
     return AREA_W[k] + (AREA_W[k + 1] - AREA_W[k]) * (x - k);
   }
   var OUTLINE = "12,0 14.833,8.719 24,8.719 16.584,14.107 19.416,22.825 12,17.437 4.584,22.825 7.416,14.107 0,8.719 9.167,8.719";
-  var INSIDE = "12,2.33 14.31,9.439 21.784,9.439 15.737,13.832 18.047,20.94 12,16.547 5.953,20.94 8.263,13.832 2.216,9.439 9.69,9.439";
+  // The fill is drawn with the full OUTLINE shape so it runs under the stroke (no antialiasing seam
+  // between fill and outline), but the clip edge is placed across the inside's x-range (2.216..21.784).
   function star(fill) {
-    var hidden = (100 - widthForArea(fill)).toFixed(1);
+    var edge = 2.216 + 19.568 * widthForArea(fill) / 100, hidden = ((24 - edge) / 24 * 100).toFixed(2);
     return '<svg viewBox="0 0 24 22.825" aria-hidden="true">' +
-      (fill > 0 ? '<polygon points="' + INSIDE + '" fill="currentColor" style="clip-path:inset(0 ' + hidden + '% 0 0)"/>' : "") +
+      (fill > 0 ? '<polygon points="' + OUTLINE + '" fill="currentColor" style="clip-path:inset(0 ' + hidden + '% 0 0)"/>' : "") +
       '<polygon points="' + OUTLINE + '" fill="none" stroke="#a86f00" stroke-width="1.6" stroke-linejoin="round"/></svg>';
   }
 
