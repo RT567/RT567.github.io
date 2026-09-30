@@ -8,8 +8,8 @@ ol{list-style:none;margin:0;padding:0}
 li{padding-left:6.5em;text-indent:-6.5em}
 time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font-size:.8em;color:#666}
 .r{margin-left:.6em;white-space:nowrap;text-indent:0}
-.r i{font-style:normal;cursor:pointer;margin:0 1px;position:relative;display:inline-block}
-.r s{position:absolute;left:0;top:0;overflow:hidden;text-decoration:none}
+.r i{cursor:pointer;margin:0 1px;color:#f0a800;display:inline-block;vertical-align:-.05em}
+.r svg{display:block;width:.72em;height:.685em;overflow:visible}
 .r small{color:#666;margin-left:.3em}
 @media (max-width:600px){body{font-size:14px;margin:30px auto}h1{font-size:1.6em}}
 </style>
@@ -64,6 +64,25 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
     return r;
   });
 
+  // Partial stars are filled left to right by *area* of the star's inside (the outline is drawn on
+  // top and doesn't count). A star is thin at its side points, so e.g. 30% of the area needs ~40%
+  // of the width. AREA_W[k] = % of the inside's width that covers k*5% of its area, computed offline
+  // by clipping the star polygon (see ai-notes). The inside is the outline star inset by half the
+  // stroke, which is the same shape scaled down, so the same table applies.
+  var AREA_W = [0, 20.5, 26.2, 30, 33.1, 36.4, 39.8, 42.7, 45.4, 47.8, 50, 52.2, 54.6, 57.3, 60.2, 63.6, 66.9, 70, 73.8, 79.5, 100];
+  function widthForArea(f) {
+    var x = f * 20, k = Math.min(19, Math.floor(x));
+    return AREA_W[k] + (AREA_W[k + 1] - AREA_W[k]) * (x - k);
+  }
+  var OUTLINE = "12,0 14.833,8.719 24,8.719 16.584,14.107 19.416,22.825 12,17.437 4.584,22.825 7.416,14.107 0,8.719 9.167,8.719";
+  var INSIDE = "12,2.33 14.31,9.439 21.784,9.439 15.737,13.832 18.047,20.94 12,16.547 5.953,20.94 8.263,13.832 2.216,9.439 9.69,9.439";
+  function star(fill) {
+    var hidden = (100 - widthForArea(fill)).toFixed(1);
+    return '<svg viewBox="0 0 24 22.825" aria-hidden="true">' +
+      (fill > 0 ? '<polygon points="' + INSIDE + '" fill="currentColor" style="clip-path:inset(0 ' + hidden + '% 0 0)"/>' : "") +
+      '<polygon points="' + OUTLINE + '" fill="none" stroke="#a86f00" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+  }
+
   function starOf(e) { var t = e.target.closest && e.target.closest("[data-n]"); return t ? +t.dataset.n : 0; }
 
   function render(r) {
@@ -72,7 +91,7 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
     value = showAvg ? (a ? a.avg : rated) : (r.hover || rated || 0);
     for (var i = 1; i <= 5; i++) {
       var fill = Math.max(0, Math.min(1, value - (i - 1))); // average 4.3 -> 4 full stars + 30% of the fifth
-      html += '<i data-n="' + i + '"><s style="width:' + Math.round(fill * 100) + '%">★</s>☆</i>';
+      html += '<i data-n="' + i + '">' + star(fill) + "</i>";
     }
     if (!rated) html += "<small>rate it</small>";
     r.el.innerHTML = html;
