@@ -7,8 +7,9 @@ body{font:18px/1.8 sans-serif;max-width:600px;margin:60px auto;padding:0 20px}
 ol{list-style:none;margin:0;padding:0}
 li{padding-left:6.5em;text-indent:-6.5em}
 time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font-size:.8em;color:#666}
-.r{margin-left:.6em;white-space:nowrap}
-.r i{font-style:normal;cursor:pointer;padding:0 1px}
+.r{margin-left:.6em;white-space:nowrap;text-indent:0}
+.r i{font-style:normal;cursor:pointer;margin:0 1px;position:relative;display:inline-block}
+.r s{position:absolute;left:0;top:0;overflow:hidden;text-decoration:none}
 .r small{color:#666;margin-left:.3em}
 @media (max-width:600px){body{font-size:14px;margin:30px auto}h1{font-size:1.6em}}
 </style>
@@ -54,20 +55,25 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
     a.addEventListener("auxclick", markVisited);
     r.el.addEventListener("mouseenter", function () { if (mine[r.site]) { r.editing = true; render(r); } });
     r.el.addEventListener("mouseleave", function () { r.editing = false; r.hover = 0; render(r); });
-    r.el.addEventListener("mouseover", function (e) { var n = +e.target.dataset.n; if (n && n !== r.hover) { r.hover = n; render(r); } });
+    r.el.addEventListener("mouseover", function (e) { var n = starOf(e); if (n && n !== r.hover) { r.hover = n; render(r); } });
     r.el.addEventListener("click", function (e) {
-      var n = +e.target.dataset.n;
+      var n = starOf(e);
       if (mine[r.site] && !r.editing) { r.editing = true; render(r); return; } // touch: first tap opens editing
       if (n) rate(r, n);
     });
     return r;
   });
 
+  function starOf(e) { var t = e.target.closest && e.target.closest("[data-n]"); return t ? +t.dataset.n : 0; }
+
   function render(r) {
     if (!visited[r.site]) { r.el.innerHTML = ""; return; }
-    var rated = mine[r.site], a = avg[r.site], showAvg = rated && !r.editing, filled, html = "";
-    filled = showAvg ? Math.round(a ? a.avg : rated) : (r.hover || rated || 0);
-    for (var i = 1; i <= 5; i++) html += '<i data-n="' + i + '">' + (i <= filled ? "★" : "☆") + "</i>";
+    var rated = mine[r.site], a = avg[r.site], showAvg = rated && !r.editing, value, html = "";
+    value = showAvg ? (a ? a.avg : rated) : (r.hover || rated || 0);
+    for (var i = 1; i <= 5; i++) {
+      var fill = Math.max(0, Math.min(1, value - (i - 1))); // average 4.3 -> 4 full stars + 30% of the fifth
+      html += '<i data-n="' + i + '"><s style="width:' + Math.round(fill * 100) + '%">★</s>☆</i>';
+    }
     if (!rated) html += "<small>rate it</small>";
     r.el.innerHTML = html;
   }
