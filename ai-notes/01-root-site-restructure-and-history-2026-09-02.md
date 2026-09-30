@@ -26,7 +26,7 @@ ai-notes/             <- these notes
 | 2026-08-30 → ongoing | A background job commits `fbiautotracklist: update YYYY-MM-DD HH:MM` every ~15–20 min. See "The auto-updater" below. |
 | 2026-08-31 | `fbimap/` added: "FBi program similarity map (past year of tracklists, artist overlap)"; later search box, genre lookups, guaranteed graph connectivity. |
 | 2026-09-02 | **Restructure.** Everything portfolio-related moved into `eportfolio/` (`git mv`, paths inside were all relative so nothing broke; note `Maven Image.png` has a space and needed its own `git mv`). Root `index.html` replaced by the link list. Portfolio banner changed to say "accurate as of 2024". Links added: websight, latina-map (made for jackson), curlysim, fbiautotracklist, fbimap, cake-cutter (made for reggie), landmarks, moongrader. Links removed: eportfolio (owner: "get rid of it on the landing page"), github-slideshow (a 2021 GitHub Learning Lab starter repo; deleting the repo itself needs `gh auth refresh -h github.com -s delete_repo` which hasn't been run). `moonboard` renamed to `moongrader` (repo rename + link). List sorted alphabetically. |
-| 2026-09-30 | Links added: snowpack, and four new silly sites (each its own repo + Pages): autism-test, every-onion, magic-8-ball (links to `/magic-8-ball/set/`, the rigging page, on Rob's request; the bare `/magic-8-ball/` is what recipients get), put-it-in-the-backpack. Later the same day: reflection (a pure black page). |
+| 2026-09-30 | Links added: snowpack, and four new silly sites (each its own repo + Pages): autism-test, every-onion, magic-8-ball (links to `/magic-8-ball/set/`, the rigging page, on Rob's request; the bare `/magic-8-ball/` is what recipients get), put-it-in-the-backpack. Later the same day: reflection (a pure black page), and the landing page became a dated chronological timeline. |
 
 ## The auto-updater (important)
 
@@ -46,10 +46,16 @@ Consequences for anyone editing here:
 
 ## Landing page conventions
 
-- Plain `<ul>`; one `<li><a href="/<repo>/">name</a></li>` per site, **alphabetical by link text**.
+(Changed 2026-09-30: was an alphabetical list; Rob asked for a chronological timeline.)
+
+- Plain `<ol>` timeline, **oldest first**, one `<li><time>YYYY-MM-DD</time><a href="/<repo>/">name</a></li>` per site.
+- The date is the **first release**, not last update: the repo's `created_at` (≈ first Pages deploy) in AEST,
+  or the first commit of the folder for `fbiautotracklist/` and `fbimap/`. Ties on the same day go in release order.
 - Optional dedication after the link: ` (made for jackson)`, ` (made for reggie)`.
-- Title `rt567`, heading `stuff`, one-line inline `<style>` (18px sans, 600px max-width). Keep it this plain — owner asked for "just a list of links".
-- When a new Pages site appears in the owner's account (`gh api repos/RT567/<repo>/pages`), add it here.
+- magic-8-ball links to `/magic-8-ball/set/` (the rigging page), on Rob's request.
+- Title `rt567`, heading `stuff`, a few lines of inline CSS (18px sans, 600px max-width, left border as the
+  timeline line, monospace grey dates with a hanging indent). Keep it very, very basic.
+- When a new Pages site appears in the owner's account (`gh api repos/RT567/<repo>/pages`), append it at the bottom with today's date.
 
 ## Portfolio (`eportfolio/`)
 
