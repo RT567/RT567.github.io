@@ -32,7 +32,7 @@ time{display:inline-block;width:7.5em;text-indent:0;font-family:monospace;color:
 </ol>
 <script>
 // Star ratings. You can rate a site once you've opened it from this page. After rating you see
-// the average; hover (or tap) the stars to change your rating. Backend: ~/silly/ratings.
+// the average (stars only, no text); hover (or tap) the stars to change your rating. Backend: ~/silly/ratings.
 (function () {
   var API = "https://rt567-ratings.rt567.workers.dev";
   function load(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
@@ -46,7 +46,7 @@ time{display:inline-block;width:7.5em;text-indent:0;font-family:monospace;color:
   }
 
   var rows = [].map.call(document.querySelectorAll("ol a"), function (a) {
-    var r = { site: a.getAttribute("href").split("/")[1], el: document.createElement("span"), editing: false, hover: 0, msg: "" };
+    var r = { site: a.getAttribute("href").split("/")[1], el: document.createElement("span"), editing: false, hover: 0 };
     r.el.className = "r";
     a.parentNode.appendChild(r.el);
     function markVisited() { visited[r.site] = 1; save("visited", visited); render(r); }
@@ -68,20 +68,18 @@ time{display:inline-block;width:7.5em;text-indent:0;font-family:monospace;color:
     var rated = mine[r.site], a = avg[r.site], showAvg = rated && !r.editing, filled, html = "";
     filled = showAvg ? Math.round(a ? a.avg : rated) : (r.hover || rated || 0);
     for (var i = 1; i <= 5; i++) html += '<i data-n="' + i + '">' + (i <= filled ? "★" : "☆") + "</i>";
-    if (r.msg) html += "<small>" + r.msg + "</small>";
-    else if (showAvg && a) html += "<small>" + a.avg.toFixed(1) + " (" + a.count + ")</small>";
-    else if (rated) html += "<small>yours: " + (r.hover || rated) + "</small>";
-    else html += "<small>rate it</small>";
+    if (!rated) html += "<small>rate it</small>";
     r.el.innerHTML = html;
   }
 
   function rate(r, n) {
+    var prev = mine[r.site];
     mine[r.site] = n; save("mine", mine);
-    r.editing = false; r.hover = 0; r.msg = ""; render(r);
+    r.editing = false; r.hover = 0; render(r);
     fetch(API + "/rate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ site: r.site, stars: n, voter: voter }) })
       .then(function (res) { return res.json().then(function (j) { if (!res.ok) throw j; return j; }); })
       .then(function (j) { avg[r.site] = { avg: j.avg, count: j.count }; render(r); })
-      .catch(function () { r.msg = "not saved"; render(r); });
+      .catch(function () { if (prev) mine[r.site] = prev; else delete mine[r.site]; save("mine", mine); render(r); });
   }
 
   function renderAll() { rows.forEach(render); }
