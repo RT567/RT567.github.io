@@ -1,0 +1,53 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ratings</title>
+<style>
+body{font:18px/1.8 sans-serif;max-width:600px;margin:60px auto;padding:0 20px}
+ol{list-style:none;margin:0;padding:0}
+li{display:flex;gap:.6em;align-items:baseline}
+li a{flex:1}
+.avg{font-variant-numeric:tabular-nums}
+.avg i{font-style:normal;color:#f0a800}
+small{color:#666}
+.none{color:#999}
+@media (max-width:600px){body{font-size:14px;margin:30px auto}h1{font-size:1.6em}}
+</style>
+<h1>ratings</h1>
+<ol id="list"><li class="none">loading…</li></ol>
+<script>
+// Unlisted overview of every site's average rating. Site list comes from the stuff page (/), so new
+// sites appear here automatically; ratings come from the API in ~/silly/ratings.
+(function () {
+  var API = "https://rt567-ratings.rt567.workers.dev";
+  var list = document.getElementById("list");
+
+  Promise.all([
+    fetch("/").then(function (r) { return r.text(); }),
+    fetch(API + "/ratings").then(function (r) { if (!r.ok) throw r; return r.json(); })
+  ]).then(function (res) {
+    var doc = new DOMParser().parseFromString(res[0], "text/html"), avg = res[1], seen = {};
+    var sites = [].map.call(doc.querySelectorAll("ol a"), function (a) {
+      var href = a.getAttribute("href"), site = href.split("/")[1];
+      seen[site] = 1;
+      return { site: site, href: href, name: a.textContent };
+    });
+    Object.keys(avg).forEach(function (k) { if (!seen[k]) sites.push({ site: k, href: "/" + k + "/", name: k + " (not listed)" }); });
+    sites.sort(function (a, b) { return ((avg[b.site] || {}).avg || 0) - ((avg[a.site] || {}).avg || 0); });
+
+    list.innerHTML = "";
+    sites.forEach(function (s) {
+      var a = avg[s.site], li = document.createElement("li"), link = document.createElement("a"), v = document.createElement("span");
+      link.href = s.href; link.textContent = s.name;
+      if (a) {
+        v.className = "avg";
+        v.innerHTML = "<i>★</i> " + a.avg.toFixed(1) + " <small>· " + a.count + (a.count === 1 ? " vote" : " votes") + "</small>";
+      } else {
+        v.className = "none"; v.textContent = "no votes";
+      }
+      li.appendChild(link); li.appendChild(v); list.appendChild(li);
+    });
+  }).catch(function () { list.innerHTML = '<li class="none">couldn’t load ratings</li>'; });
+})();
+</script>
