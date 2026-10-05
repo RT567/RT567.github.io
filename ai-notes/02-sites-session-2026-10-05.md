@@ -16,9 +16,8 @@ One long session touched most of the sites linked from the stuff page. This is t
 | landmarks | 02 | phone-only CSS (zoomed drawing, bigger controls, no sideways scroll). Uses CSS `zoom` (Firefox 126+) |
 | curlysim | 02–05 | first-person legs + true 1.98 m boards for everyone; crowd 1–20 along the whole beach (north/south seat limits from the headlands); wave-train jam fixed (the "sudden quarter speed"); literature-based physics; seabed from the NSW Marine LiDAR 2018 survey; seat just outside where set waves break, capped at Hs 2 m; ocean tiling/phone quality (perf agent) |
 
-## Not pushed yet
-- **curlysim real day/night** (commit 838f1c3, local): removes the old "always late morning" sun; nights are
-  moonlit and readable. Waiting for Rob to look at it (bd curlysim-l9b).
+## Pushed at the end of the session
+- **curlysim real day/night**: removes the old "always late morning" sun; nights are moonlit and readable.
 
 ## Open threads (bd issues filed in curlysim)
 Sandbars/rips from the LiDAR data, tide, second swell, crest bending, rendered wave trough — see
