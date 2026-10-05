@@ -62,8 +62,8 @@ Consequences for anyone editing here:
   Unlisted overview of all ratings at `/ratings/` (not linked; for Rob). After a vote the row shows your pick with
   "thanks ✓" for 1.5s, then the average as "avg 3.0 · 4 votes".
   2026-10-05: the list is one CSS grid (date | name | stars; `li { display: contents }`) so every row's stars start
-  at the same x; "(made for …)" notes removed; dates .7em. Phones (≤440px) show "4.5 · 4" (the "avg"/"votes"
-  words are `.w` spans hidden by CSS) so rows never wrap.
+  at the same x; "(made for …)" notes removed; dates .7em. Phones (≤440px) stack "avg 4.5" over "4 votes"
+  in .62em type (`small.avg` inline-flex column) so rows never wrap and keep their height.
 - When a new Pages site appears in the owner's account (`gh api repos/RT567/<repo>/pages`), append it at the bottom with today's date.
 
 ## Portfolio (`eportfolio/`)
