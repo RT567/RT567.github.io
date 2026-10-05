@@ -34,13 +34,14 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
 </ol>
 <script>
 // Star ratings. You can rate a site once you've opened it from this page. After rating you see
-// the average (stars only, no text); hover (or tap) the stars to change your rating. Backend: ~/silly/ratings.
+// the average as stars plus "4.5 · 4 votes"; hover to preview, click (or tap) a star to change your
+// rating. Backend: ~/silly/ratings.
 (function () {
   var API = "https://rt567-ratings.rt567.workers.dev";
   function load(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
-  var visited = load("visited", {}), mine = load("mine", {}), avg = {};
+  var visited = load("visited", {}), mine = load("mine", {}), avg = {}, loaded = false;
   var voter = load("voter", null);
   if (!voter) {
     voter = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36) + Math.random().toString(36).slice(2)).replace(/[^A-Za-z0-9]/g, "");
@@ -48,7 +49,7 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
   }
 
   var rows = [].map.call(document.querySelectorAll("ol a"), function (a) {
-    var r = { site: a.getAttribute("href").split("/")[1], el: document.createElement("span"), editing: false, hover: 0 };
+    var r = { site: a.getAttribute("href").split("/")[1], el: document.createElement("span"), editing: false, hover: 0, seq: 0, pending: false, msg: "" };
     r.el.className = "r";
     a.parentNode.appendChild(r.el);
     function markVisited() { visited[r.site] = 1; save("visited", visited); render(r); }
@@ -57,11 +58,7 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
     r.el.addEventListener("mouseenter", function () { if (mine[r.site]) { r.editing = true; render(r); } });
     r.el.addEventListener("mouseleave", function () { r.editing = false; r.hover = 0; render(r); });
     r.el.addEventListener("mouseover", function (e) { var n = starOf(e); if (n && n !== r.hover) { r.hover = n; render(r); } });
-    r.el.addEventListener("click", function (e) {
-      var n = starOf(e);
-      if (mine[r.site] && !r.editing) { r.editing = true; render(r); return; } // touch: first tap opens editing
-      if (n) rate(r, n);
-    });
+    r.el.addEventListener("click", function (e) { var n = starOf(e); if (n) rate(r, n); });
     return r;
   });
 
@@ -89,29 +86,54 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
 
   function render(r) {
     if (!visited[r.site]) { r.el.innerHTML = ""; return; }
-    var rated = mine[r.site], a = avg[r.site], showAvg = rated && !r.editing, value, html = "";
-    value = showAvg ? (a ? a.avg : rated) : (r.hover || rated || 0);
+    var rated = mine[r.site], a = avg[r.site], html = "", note = "";
+    if (rated && !loaded && !r.editing) { r.el.innerHTML = ""; return; } // wait for the average instead of flashing your own vote
+    var showAvg = rated && !r.editing && !r.pending && a;
+    var value = showAvg ? a.avg : (r.hover || rated || 0);
+    if (r.msg) note = r.msg;
+    else if (!rated) note = "rate it";
+    else if (r.pending) note = "saving\u2026";
+    else if (showAvg) note = a.avg.toFixed(1) + " \u00b7 " + a.count + (a.count === 1 ? " vote" : " votes");
     for (var i = 1; i <= 5; i++) {
       var fill = Math.max(0, Math.min(1, value - (i - 1))); // average 4.3 -> 4 full stars + 30% of the fifth
       html += '<i data-n="' + i + '">' + star(fill) + "</i>";
     }
-    if (!rated) html += "<small>rate it</small>";
+    if (note) html += "<small>" + note + "</small>";
     r.el.innerHTML = html;
   }
 
+  // seq: only the newest request for a row may update it (rapid re-rates can resolve out of order).
   function rate(r, n) {
-    var prev = mine[r.site];
+    var prev = mine[r.site], my = ++r.seq;
     mine[r.site] = n; save("mine", mine);
-    r.editing = false; r.hover = 0; render(r);
+    r.editing = false; r.hover = 0; r.pending = true; r.msg = ""; render(r);
     fetch(API + "/rate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ site: r.site, stars: n, voter: voter }) })
-      .then(function (res) { return res.json().then(function (j) { if (!res.ok) throw j; return j; }); })
-      .then(function (j) { avg[r.site] = { avg: j.avg, count: j.count }; render(r); })
-      .catch(function () { if (prev) mine[r.site] = prev; else delete mine[r.site]; save("mine", mine); render(r); });
+      .then(function (res) { return res.json().then(function (j) { if (!res.ok) { j.status = res.status; throw j; } return j; }); })
+      .then(function (j) { if (my !== r.seq) return; r.pending = false; avg[r.site] = { avg: j.avg, count: j.count }; render(r); })
+      .catch(function (err) {
+        if (my !== r.seq) return;
+        r.pending = false;
+        if (prev) mine[r.site] = prev; else delete mine[r.site]; save("mine", mine);
+        flash(r, err && err.status === 429 ? "too many votes from your network" : "couldn\u2019t save, try again");
+      });
+  }
+
+  function flash(r, msg) {
+    r.msg = msg; render(r);
+    setTimeout(function () { if (r.msg === msg) { r.msg = ""; render(r); } }, 3000);
   }
 
   function renderAll() { rows.forEach(render); }
+  function fetchAll() {
+    fetch(API + "/ratings")
+      .then(function (res) { if (!res.ok) throw res; return res.json(); })
+      .then(function (j) { avg = j; })
+      .catch(function () {})
+      .then(function () { loaded = true; renderAll(); });
+  }
   renderAll();
-  fetch(API + "/ratings").then(function (res) { return res.json(); }).then(function (j) { avg = j; renderAll(); }).catch(function () {});
-  window.addEventListener("pageshow", function () { visited = load("visited", {}); renderAll(); });
+  fetchAll();
+  // Back/forward cache restores the page without rerunning this script, so refresh the averages then.
+  window.addEventListener("pageshow", function (e) { visited = load("visited", {}); renderAll(); if (e.persisted) fetchAll(); });
 })();
 </script>
