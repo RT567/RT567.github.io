@@ -4,26 +4,28 @@
 <title>rt567</title>
 <style>
 body{font:18px/1.8 sans-serif;max-width:600px;margin:60px auto;padding:0 20px}
-ol{list-style:none;margin:0;padding:0}
-li{padding-left:6.5em;text-indent:-6.5em}
-time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font-size:.8em;color:#666}
-.r{margin-left:.6em;white-space:nowrap;text-indent:0}
+/* one grid for every row: date | name | stars, so the stars all start at the same x */
+ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:auto auto 1fr;column-gap:.8em;align-items:baseline}
+li{display:contents}
+time{font-family:monospace;font-size:.7em;color:#666}
+.r{white-space:nowrap}
 .r i{cursor:pointer;margin:0 1px;color:#f0a800;display:inline-block;vertical-align:-.05em}
 .r svg{display:block;width:.72em;height:.685em;overflow:visible}
 .r small{color:#666;margin-left:.3em}
-@media (max-width:600px){body{font-size:14px;margin:30px auto}h1{font-size:1.6em}}
+@media (max-width:600px){body{font-size:14px;margin:30px auto;padding:0 12px}h1{font-size:1.6em}ol{column-gap:.6em}}
+@media (max-width:440px){.r .w{display:none}} /* phones: "4.5 · 4" instead of "avg 4.5 · 4 votes" */
 </style>
 <h1>stuff</h1>
 <ol>
 <li><time>2024-10-17</time><a href="/moongrader/">moongrader</a></li>
 <li><time>2025-03-06</time><a href="/landmarks/">landmarks</a></li>
 <li><time>2026-06-19</time><a href="/incubator/">incubator</a></li>
-<li><time>2026-07-28</time><a href="/cake-cutter/">cake-cutter</a> (made for reggie)</li>
+<li><time>2026-07-28</time><a href="/cake-cutter/">cake-cutter</a></li>
 <li><time>2026-08-30</time><a href="/fbiautotracklist/">fbiautotracklist</a></li>
 <li><time>2026-08-31</time><a href="/fbimap/">fbimap</a></li>
 <li><time>2026-09-01</time><a href="/curlysim/">curlysim</a></li>
 <li><time>2026-09-02</time><a href="/websight/">websight</a></li>
-<li><time>2026-09-02</time><a href="/latina-map/">latina-map</a> (made for jackson)</li>
+<li><time>2026-09-02</time><a href="/latina-map/">latina-map</a></li>
 <li><time>2026-09-02</time><a href="/talkingbeers/">talkingbeers</a></li>
 <li><time>2026-09-16</time><a href="/snowpack/">snowpack</a></li>
 <li><time>2026-09-30</time><a href="/put-it-in-the-backpack/">put-it-in-the-backpack</a></li>
@@ -93,7 +95,7 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
     if (r.msg) note = r.msg;
     else if (!rated) note = "rate it";
     else if (r.pending || r.thanks) note = "thanks \u2713";
-    else if (showAvg) note = "avg " + a.avg.toFixed(1) + " \u00b7 " + a.count + (a.count === 1 ? " vote" : " votes");
+    else if (showAvg) note = '<span class="w">avg </span>' + a.avg.toFixed(1) + " \u00b7 " + a.count + '<span class="w">' + (a.count === 1 ? " vote" : " votes") + "</span>";
     for (var i = 1; i <= 5; i++) {
       var fill = Math.max(0, Math.min(1, value - (i - 1))); // average 4.3 -> 4 full stars + 30% of the fifth
       html += '<i data-n="' + i + '">' + star(fill) + "</i>";
