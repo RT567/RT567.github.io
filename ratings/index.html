@@ -12,10 +12,13 @@ li a{flex:1}
 .avg i{font-style:normal;color:#f0a800}
 small{color:#666}
 .none{color:#999}
+#forget{margin-top:2em;font:inherit;font-size:.8em;color:#666;background:none;border:1px solid #ccc;border-radius:6px;padding:.3em .8em;cursor:pointer}
+#forgot{font-size:.8em;color:#666;margin-left:.6em}
 @media (max-width:600px){body{font-size:14px;margin:30px auto}h1{font-size:1.6em}}
 </style>
 <h1>ratings</h1>
 <ol id="list"><li class="none">loading…</li></ol>
+<button id="forget" type="button">remove my votes (this browser)</button><span id="forgot"></span>
 <script>
 // Unlisted overview of every site's average rating. Site list comes from the stuff page (/), so new
 // sites appear here automatically; ratings come from the API in ~/silly/ratings.
@@ -23,7 +26,8 @@ small{color:#666}
   var API = "https://rt567-ratings.rt567.workers.dev";
   var list = document.getElementById("list");
 
-  Promise.all([
+  function load() {
+  return Promise.all([
     fetch("/").then(function (r) { return r.text(); }),
     fetch(API + "/ratings").then(function (r) { if (!r.ok) throw r; return r.json(); })
   ]).then(function (res) {
@@ -49,5 +53,27 @@ small{color:#666}
       li.appendChild(link); li.appendChild(v); list.appendChild(li);
     });
   }).catch(function () { list.innerHTML = '<li class="none">couldn’t load ratings</li>'; });
+  }
+  load();
+
+  // Delete every vote this browser has cast (the stuff page's random voter id lives in this origin's
+  // localStorage) and forget its picks, so the averages above are other people's only.
+  var forget = document.getElementById("forget"), forgot = document.getElementById("forgot");
+  forget.addEventListener("click", function () {
+    var voter = null;
+    try { voter = JSON.parse(localStorage.getItem("voter")); } catch (e) {}
+    if (!voter) { forgot.textContent = "this browser hasn’t voted"; return; }
+    if (!confirm("Remove every vote this browser has made?")) return;
+    forget.disabled = true;
+    fetch(API + "/forget", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ voter: voter }) })
+      .then(function (r) { if (!r.ok) throw r; return r.json(); })
+      .then(function (j) {
+        try { localStorage.removeItem("mine"); } catch (e) {}
+        forgot.textContent = "removed " + j.deleted + (j.deleted === 1 ? " vote" : " votes");
+        return load();
+      })
+      .catch(function () { forgot.textContent = "couldn’t remove them, try again"; })
+      .then(function () { forget.disabled = false; });
+  });
 })();
 </script>
