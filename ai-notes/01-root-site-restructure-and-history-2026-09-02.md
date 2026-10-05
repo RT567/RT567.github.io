@@ -59,6 +59,8 @@ Consequences for anyone editing here:
   for sites the visitor has opened from this page; after rating they see the average, and hovering/tapping the stars
   lets them change their vote. Backend is a Cloudflare Worker + D1 in `~/silly/ratings` (read its ai-notes). The
   script keys ratings by the link's first path segment, so new `<li>`s get stars automatically.
+  Unlisted overview of all ratings at `/ratings/` (not linked; for Rob). After a vote the row shows your pick with
+  "thanks ✓" for 1.5s, then the average as "avg 3.0 · 4 votes".
 - When a new Pages site appears in the owner's account (`gh api repos/RT567/<repo>/pages`), append it at the bottom with today's date.
 
 ## Portfolio (`eportfolio/`)

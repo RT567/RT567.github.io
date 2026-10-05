@@ -34,8 +34,8 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
 </ol>
 <script>
 // Star ratings. You can rate a site once you've opened it from this page. After rating you see
-// the average as stars plus "4.5 · 4 votes"; hover to preview, click (or tap) a star to change your
-// rating. Backend: ~/silly/ratings.
+// your pick with "thanks ✓" for a moment, then the average as stars plus "avg 4.5 · 4 votes"; hover to
+// preview, click (or tap) a star to change your rating. Backend: ~/silly/ratings.
 (function () {
   var API = "https://rt567-ratings.rt567.workers.dev";
   function load(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
@@ -49,7 +49,7 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
   }
 
   var rows = [].map.call(document.querySelectorAll("ol a"), function (a) {
-    var r = { site: a.getAttribute("href").split("/")[1], el: document.createElement("span"), editing: false, hover: 0, seq: 0, pending: false, msg: "" };
+    var r = { site: a.getAttribute("href").split("/")[1], el: document.createElement("span"), editing: false, hover: 0, seq: 0, pending: false, thanks: false, msg: "" };
     r.el.className = "r";
     a.parentNode.appendChild(r.el);
     function markVisited() { visited[r.site] = 1; save("visited", visited); render(r); }
@@ -88,12 +88,12 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
     if (!visited[r.site]) { r.el.innerHTML = ""; return; }
     var rated = mine[r.site], a = avg[r.site], html = "", note = "";
     if (rated && !loaded && !r.editing) { r.el.innerHTML = ""; return; } // wait for the average instead of flashing your own vote
-    var showAvg = rated && !r.editing && !r.pending && a;
+    var showAvg = rated && !r.editing && !r.pending && !r.thanks && a;
     var value = showAvg ? a.avg : (r.hover || rated || 0);
     if (r.msg) note = r.msg;
     else if (!rated) note = "rate it";
-    else if (r.pending) note = "saving\u2026";
-    else if (showAvg) note = a.avg.toFixed(1) + " \u00b7 " + a.count + (a.count === 1 ? " vote" : " votes");
+    else if (r.pending || r.thanks) note = "thanks \u2713";
+    else if (showAvg) note = "avg " + a.avg.toFixed(1) + " \u00b7 " + a.count + (a.count === 1 ? " vote" : " votes");
     for (var i = 1; i <= 5; i++) {
       var fill = Math.max(0, Math.min(1, value - (i - 1))); // average 4.3 -> 4 full stars + 30% of the fifth
       html += '<i data-n="' + i + '">' + star(fill) + "</i>";
@@ -106,13 +106,17 @@ time{display:inline-block;width:8.125em;text-indent:0;font-family:monospace;font
   function rate(r, n) {
     var prev = mine[r.site], my = ++r.seq;
     mine[r.site] = n; save("mine", mine);
-    r.editing = false; r.hover = 0; r.pending = true; r.msg = ""; render(r);
+    r.editing = false; r.hover = 0; r.pending = true; r.msg = "";
+    // Hold your pick + "thanks ✓" for a moment so the switch to the average reads as a result, not a glitch.
+    r.thanks = true; clearTimeout(r.thanksTimer);
+    r.thanksTimer = setTimeout(function () { r.thanks = false; render(r); }, 1500);
+    render(r);
     fetch(API + "/rate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ site: r.site, stars: n, voter: voter }) })
       .then(function (res) { return res.json().then(function (j) { if (!res.ok) { j.status = res.status; throw j; } return j; }); })
       .then(function (j) { if (my !== r.seq) return; r.pending = false; avg[r.site] = { avg: j.avg, count: j.count }; render(r); })
       .catch(function (err) {
         if (my !== r.seq) return;
-        r.pending = false;
+        r.pending = false; r.thanks = false; clearTimeout(r.thanksTimer);
         if (prev) mine[r.site] = prev; else delete mine[r.site]; save("mine", mine);
         flash(r, err && err.status === 429 ? "too many votes from your network" : "couldn\u2019t save, try again");
       });
